@@ -1,0 +1,56 @@
+﻿@model IEnumerable<EmployeeManagment.Models.UserProfile>
+@{
+    ViewData["Title"] = "Search";
+}
+<p style="padding-left: 60px; padding-top: 20px;">
+    <a class="btn btn-warning" role="button" href="~/Employee/Search">
+        Back
+    </a>
+</p>
+<div style="padding-top: 55px;">
+    @if (Model.Count() != 0)
+    {
+        <h3 style="color:#2874A6">Results of search</h3>
+        <table class="table-blue" style="padding-bottom:7px;">
+            <tr>
+                <th>Login</th>
+                <th>Name</th>
+                <th>Surname</th>
+                <th>Command</th>
+                <th>Level</th>
+                <th>Work from home</th>
+                <th>Work from office</th>
+                <th>Experience</th>
+                <th>Average task complexity</th>
+            </tr>
+            @foreach (var user in Model)
+            {
+                <tr style="padding-top:7px;">
+                    <td>@user.Login</td>
+                    <td>@user.FirstName</td>
+                    <td>@user.SecondName</td>
+                    <td>@user.CommandId</td>
+                    <td>@user.Level</td>
+                    <td>@user.AbilityToWorkInHome</td>
+                    <td>@user.AbilityToWorkInOffice</td>
+                    <td>@user.Experience</td>
+                    <td>@user.AverageComplexityOfTasks</td>
+                    <td>
+                        <form method="get" action="~/Employee/AddEmployee">
+                            <input type="hidden" value="@user.Id" name="Id">
+                            <div style="padding-bottom:7px;">
+                                <input class="btn btn-warning" style="margin:auto; padding-bottom: 7px;" type="submit" value="Add">
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+    else
+    {
+        <h3 style="color:#2874A6">Results of search</h3>
+    }
+
+    @*<p>Last employee should go to team @ViewBag.Group</p>*@
+</div>

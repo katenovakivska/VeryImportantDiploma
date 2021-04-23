@@ -1,0 +1,102 @@
+﻿@model EmployeeManagment.Models.UserProfile
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div style="padding-left: 60px; padding-top: 20px;">
+    <a class="btn btn-warning" role="button" href="~/Authentication/UserProfile">
+        Back
+    </a>
+    </div>
+    <div style="padding-top:35px; padding-bottom: 15px;">
+        <form method="post" class="form-blue" action="~/Authentication/UpdateProfile">
+            <h3 style="color: aliceblue;">Change info</h3>
+            <input type="hidden" name="Id" value="@Model.Id">
+            <p>
+                <input class="form-control" type="text" name="model.FirstName" placeholder="Name" value="@Model.FirstName" required />
+            </p>
+            <p>
+                <input class="form-control" type="text" name="model.SecondName" placeholder="Surname" value="@Model.SecondName" required />
+            </p>
+            <p>
+                <input class="form-control" type="text" name="model.Login" placeholder="Login" value="@Model.Login" required />
+            </p>
+            <p>
+                <input class="form-control" type="text" name="model.Email" placeholder="Email" value="@Model.Email" required />
+            </p>
+            <p>
+                <input class="form-control" type="text" name="model.Password" placeholder="Password" value="@Model.Password" required />
+            </p>
+            <p>
+                <div class="input-group mb-3" style="padding-left: 95px;padding-right: 95px;">
+                    <select class="custom-select" name="model.Level" value="@Model.Level" placeholder="Level">
+                        @{
+                            string level = "";
+                            if (Model.Level == 1) level = "junior";
+                            else if (Model.Level == 2) level = "middle";
+                            else if (Model.Level == 3) level = "senior";
+                            if (level != "")
+                            {
+                                <option selected value="@Model.Level">@level</option>
+                            }
+                        }
+                        @if (Model.Level != 1)
+                        {
+                            <option value="1">junior</option>
+                        }
+                        @if (Model.Level != 2)
+                        {
+                            <option value="2">middle</option>
+                        }
+                        @if (Model.Level != 3)
+                        {
+                            <option value="3">senior</option>
+                        }
+                    </select>
+                </div>
+            </p>
+            <p>
+                <div class="input-group mb-3" style="padding-left: 95px;padding-right: 95px;">
+                    <select class="custom-select" name="model.AbilityToWorkInHome">
+                        @{
+                            string str = (Model.AbilityToWorkInHome == 1) ? "yes" : "no";
+                            <option selected value="@Model.AbilityToWorkInHome">@str</option>
+                        }
+                        @if (Model.AbilityToWorkInHome != 1)
+                        {
+                            <option value="1">yes</option>
+                        }
+                        @if (Model.AbilityToWorkInHome != 0)
+                        {
+                            <option value="0">no</option>
+                        }
+                    </select>
+                </div>
+            </p>
+            <p>
+                <div class="input-group mb-3" style="padding-left: 95px;padding-right: 95px;">
+                    <select class="custom-select" name="model.AbilityToWorkInOffice">
+                        @{
+                            string str1 = (Model.AbilityToWorkInOffice == 1) ? "yes" : "no";
+                            <option selected value="@Model.AbilityToWorkInOffice">@str1</option>
+                        }
+                        @if (Model.AbilityToWorkInOffice != 1)
+                        {
+                            <option value="1">yes</option>
+                        }
+                        @if (Model.AbilityToWorkInOffice != 0)
+                        {
+                            <option value="0">no</option>
+                        }
+                    </select>
+                </div>
+            </p>
+            <p>
+                <input class="form-control" type="number" name="model.Experience" placeholder="Experience" value="@Model.Experience" required />
+            </p>
+            <div style="padding-bottom:15px; padding-left:160px;">
+                <input class="btn btn-warning" style="margin:auto; " type="submit" value="Update">
+            </div>
+        </form>
+    </div>

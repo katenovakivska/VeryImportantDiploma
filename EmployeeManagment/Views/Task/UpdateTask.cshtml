@@ -1,0 +1,90 @@
+﻿@model EmployeeManagment.Models.Task
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div style="padding-left: 60px; padding-top: 20px;">
+    <form method="get" action="~/Task/CommandBoard">
+        <input type="hidden" name="commandId" value="@Model.CommandId">
+        <input type="submit" class="btn btn-warning" value="Back" \>
+    </form>
+</div>
+<div style="padding-top:70px;">
+
+    <form method="post" class="form-blue" action="~/Task/UpdateTask">
+        <h3 style="color: aliceblue">Update task</h3>
+        <p>
+            <input class="form-control" type="text" value="@Model.Description" name="task.Description" placeholder="Description" required />
+        </p>
+        <input type="hidden" name="task.Id" value="@Model.Id">
+        <p>
+            @{
+                string name;
+                if (Model.Employee.FirstName != null && Model.Employee.SecondName != null)
+                {
+                    name = Model.Employee.FirstName + " " + Model.Employee.SecondName;
+                }
+                else
+                {
+                    name = Model.Employee.Login;
+                }
+            }
+            <div class="input-group mb-3" style="padding-left: 95px;padding-right: 95px;">
+                <select class="custom-select" name="task.EmployeeId" value="@Model.EmployeeId">
+                    <option selected value="@Model.EmployeeId">@name</option>
+                    @foreach (var e in ViewBag.Employees)
+                    {
+                        if (Model.EmployeeId != e.Id)
+                        {
+                            string n;
+                            if (e.FirstName != null && e.SecondName != null)
+                            {
+                                n = e.FirstName + " " + e.SecondName;
+                            }
+                            else
+                            {
+                                n = e.Login;
+                            }
+                            <option value="@e.Id">@n</option>
+                        }
+                    }
+                </select>
+            </div>
+        </p>
+        <p>
+            <input class="form-control" type="number" value="@Model.Complexity" name="task.Complexity" placeholder="Complexity" min="0" max="23" oninvalid="setCustomValidity('Please, enter value >= 0 and <= 23')" required />
+        </p>
+        <p>
+            <div class="input-group mb-3" style="padding-left: 95px;padding-right: 95px;">
+                <select class="custom-select" name="task.Status" value="@Model.Status">
+                    <option selected value="@Model.Status">@Model.Status</option>
+                    @if (Model.Status != "created")
+                    {
+                        <option value="created">created</option>
+                    }
+                    @if (Model.Status != "in progress")
+                    {
+                        <option value="in progress">in progress</option>
+                    }
+                    @if (Model.Status != "done")
+                    {
+                        <option value="done">done</option>
+                    }
+                </select>
+            </div>
+        </p>
+        <p>
+            <div style="padding-left:95px; color: aliceblue;"> Start: @Model.Start.ToString("yyyy-MM-dd")</div>
+        </p>
+        <p>
+            <input class="form-control" type="date" value="@Model.End.ToString("yyyy-MM-dd")" name="task.End" required />
+        </p>
+
+        <p>
+            <div style="padding-bottom:15px; padding-left:155px;">
+                <input class="btn btn-warning" style="margin:auto; " type="submit" value="Update">
+            </div>
+        </p>
+    </form>
+</div>

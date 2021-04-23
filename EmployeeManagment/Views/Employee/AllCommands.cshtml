@@ -1,0 +1,145 @@
+﻿@model IEnumerable<EmployeeManagment.Models.Command>
+    <!DOCTYPE html>
+
+    <html>
+    <head>
+        <title>All commands</title>
+    </head>
+    <body>
+
+        <div style="padding-left: 60px; padding-top: 20px;">
+            <a class="btn btn-warning" role="button" href="~/Employee/GetAll">
+                Back
+            </a>
+
+            <a class="btn btn-warning" role="button" href="~/Employee/CreateCommand">
+                Create
+            </a>
+        </div>
+
+        <h3 style="color:#2874A6">Commands</h3>
+
+            @if (Model.Count() != 0)
+            {
+                @foreach (var c in Model)
+                {
+                    var command = c.Name.Replace(@" ", "");
+                    command.Replace(@"/", "");
+                    command.Replace(@"#", "");
+
+                    <div class="center-button">
+                        <button class="btn btn-warning" type="button" data-toggle="collapse" data-target="#@command" aria-expanded="false" aria-controls="@command">
+                            @c.Name
+                        </button>
+                    </div>
+                    <div class="collapse" id="@command" color="#2874A6">
+                        <br>
+
+
+                        @if (c.UserCommands.Count() != 0)
+                        {
+                    <div style="padding-left: 60px; padding-top: 35px; background-color: #2874A6; opacity: 0.8;width: 100%;color: #EEF4D5;padding-bottom:15px;">
+                        <table class="table-blue" style="width:600px;">
+                            <tr>
+                                <td>
+                                    <form method="get" action="~/Employee/UpdateCommand">
+                                        <input type="hidden" name="commandId" value="@c.Id">
+                                        <input class="btn btn-warning" type="submit" style="opacity:1.0" value="Update">
+                                    </form>
+                                </td>
+                                <td>
+                                    <form method="post" action="~/Employee/DeleteCommand">
+                                        <input type="hidden" name="commandId" value="@c.Id">
+                                        <input class="btn btn-warning" type="submit" style="opacity:1.0" value="Delete">
+                                    </form>
+                                </td>
+                                <td>
+                                    <form method="get" action="~/Task/CommandBoard">
+                                        <input type="hidden" name="commandId" value="@c.Id">
+                                        <input class="btn btn-warning" type="submit" style="opacity:1.0" value="Tasks">
+                                    </form>
+                                </td>
+                                <td>
+                                    <form method="get" style="padding-left: 30px;" action="~/Employee/AddToCommand">
+                                        <input type="hidden" name="commandId" value="@c.Id">
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <div class="input-group">
+                                                        <select class="form-select" id="inputGroupSelect01" name="employeeId" style="height: 35px; width: 180px; padding-top: 5px;">
+                                                            <option selected>Choose employee</option>
+                                                            @foreach (var e in ViewBag.WithoutCommand)
+                                                            {
+                                                                string n;
+                                                                if (e.FirstName != null && e.SecondName != null)
+                                                                {
+                                                                    n = e.FirstName + " " + e.SecondName;
+                                                                }
+                                                                else
+                                                                {
+                                                                    n = e.Login;
+                                                                }
+                                                                <option value="@e.Id">@n</option>
+                                                            }
+
+
+                                                        </select>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-warning" type="submit" style="opacity:1.0">Add</button>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </form>
+                                </td>
+                            </tr>
+                        </table>
+                        
+                    </div>
+                            <p class="p-blue" style="margin-bottom:0; padding-bottom:0; padding-left:50px;">Description: @c.Description</p>
+                            <table class="table-blue" style="padding-top: 0; margin-top: 0;">
+                                <tr>
+                                    <th>Login</th>
+                                    <th>Name</th>
+                                    <th>Surname</th>
+                                    <th>Command</th>
+                                    <th>Level</th>
+                                    <th>Work from home</th>
+                                    <th>Work from office</th>
+                                    <th>Experience</th>
+                                    <th>Average task complexity</th>
+                                    <th></th>
+                                </tr>
+                                @foreach (var user in c.UserCommands)
+                                {
+                                    <tr>
+                                        <td>@user.User.Login</td>
+                                        <td>@user.User.FirstName</td>
+                                        <td>@user.User.SecondName</td>
+                                        <td>@user.User.CommandId</td>
+                                        <td>@user.User.Level</td>
+                                        <td>@user.User.AbilityToWorkInHome</td>
+                                        <td>@user.User.AbilityToWorkInOffice</td>
+                                        <td>@user.User.Experience</td>
+                                        <td>@user.User.AverageComplexityOfTasks</td>
+                                        <td>
+                                            <form method="delete" action="~/Employee/DeleteEmployee">
+                                                <input type="hidden" name="UserId" value="@user.User.Id">
+                                                <div style="padding-bottom:15px; padding-right:15px;">
+                                                    <input class="btn btn-warning" type="submit" style="opacity:1.0" value="Delete">
+                                                </div>
+                                            </form>
+                                        </td>
+                                    </tr>
+
+                                }
+                            </table>
+                        }
+
+
+                    </div>
+            }
+            }
+        </body>
+</html>

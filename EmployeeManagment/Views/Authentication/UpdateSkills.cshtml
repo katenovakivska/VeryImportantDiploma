@@ -1,0 +1,62 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<!DOCTYPE HTML>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('[data-toggle="popover"]').popover({
+                placement: 'bottom'
+            });
+        });
+    </script>
+</head>
+<body>
+    <div style="padding-left: 60px; padding-top: 20px;">
+        <a class="btn btn-warning" role="button" href="~/Authentication/UserProfile">
+            Back
+        </a>
+    </div>
+    @{ var popoverText = "<div>0-full unknowing of technology</div><div>1-knowledge of a very small part of material</div>" +
+                  "<div>2-knowledge of a small part of material</div><div>3-knowledge of basic material</div><div>4-good understanding of the necessary part</div>" +
+                  "<div>5-full knowledge of material</div>";
+    <div style="padding-left: 1000px;">
+            <a href="#" type="button" style="font-size: 22px;" class="btn btn-warning" data-toggle="popover" data-html="true" title="Estimation criteria" data-content="@popoverText">
+                <i class="fa fa-eye"></i>
+            </a>
+    </div>
+    }
+    <br>
+    <form method="post" action="~/Authentication/UpdateSkills">
+        <div class="container" style="padding-top: 40px; width: 60%;">
+            <div style="padding-bottom: 15px;">
+                <input type="hidden" name="Id" value="@ViewBag.Id">
+                <div style="padding-left: 70px">
+                    @for (int i = 0; i < ViewBag.Skills.Count; i++)
+                    {
+                        @*<p>
+                                <label style="color: aliceblue; width: 50%" for="@ViewBag.Skills[i].SkillName.Replace(" ", "")">@ViewBag.Skills[i].SkillName</label>
+                                <input class="form-control" type="number" id="@ViewBag.Skills[i].SkillName.Replace(" ", "")" name="@ViewBag.Skills[i].SkillName.Replace(" ", "")" placeholder="@ViewBag.Skills[i].SkillName" value="@ViewBag.Marks[i]" required />
+                            </p>*@
+                        string name = @ViewBag.Skills[i].SkillName.Replace(" ", "").Replace("#", "").Replace("/", "");
+                        <div class="input-group mb-3" style="width: 280px; padding-left: 80px;">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="@name">@ViewBag.Skills[i].SkillName</span>
+                            </div>
+                            <input type="number" class="form-control" name="@name" aria-label="@name" value="@ViewBag.Marks[i]" aria-describedby="inputGroup-sizing-default" min="0" max="5" oninvalid="setCustomValidity('Please, enter value >= 0 and <= 5')">
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <br>
+        <div style="padding-bottom:35px; padding-left:720px;">
+            <input class="btn btn-warning" style="margin:auto; " type="submit" value="Update">
+        </div>
+    </form>
+</body>
+</html>

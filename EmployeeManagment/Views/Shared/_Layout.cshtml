@@ -1,0 +1,291 @@
+﻿@*<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>@ViewData["Title"] - EmployeeManagment</title>
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
+    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+                <div class="container">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">EmployeeManagment</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <div class="container">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+
+        <footer class="border-top footer text-muted">
+            <div class="container">
+                &copy; 2020 - EmployeeManagment - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
+        </footer>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        @RenderSection("Scripts", required: false)
+    </body>
+    </html>*@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <style>
+        body {
+            /*background-image: url(https://www.freeimageslive.co.uk/image/view/11913/_original);*/
+            /*background-image: url(https://img4.goodfon.ru/wallpaper/nbig/1/52/kruassan-kofe-tsvety-ruchka-bloknot.jpg);*/
+            background-image: url(https://img4.goodfon.ru/wallpaper/nbig/0/7e/khrizantemy-tsvety-kofe-bloknot-ruchka.jpg);
+
+            background-attachment: fixed;
+            background-size: cover;
+        }
+
+        .table-blue {
+            background-color: #2874A6;
+            font-size: 18px;
+            text-align: center;
+            opacity: 0.8;
+            width: 100%;
+            /*font-family: 'PT Sans Caption', sans-serif;*/
+            color: #EEF4D5;
+        }
+        .center-button {
+            display: flex;
+            justify-content: center;
+            padding-top: 20px;
+        }
+        .p-blue {
+            background-color: #2874A6;
+            font-size: 18px;
+            opacity: 0.8;
+            width: 100%;
+            color: #EEF4D5;
+            padding-bottom: 0px;
+            padding-top: 10px;
+            padding-left: 10px;
+        }
+        tr {
+            height: 40px;
+        }
+
+        td {
+            max-width: 15%;
+        }
+
+        .form-blue {
+            margin: auto;
+            align-content: center;
+            background-color: #2874A6;
+            opacity: 0.8;
+            width: 25%;
+            border-radius: 15px;
+        }
+        .form-pink {
+            margin: auto;
+            align-content: center;
+            background-color: #F2D7D5;
+            opacity: 0.8;
+            width: 25%;
+            border-radius: 15px;
+        }
+        .form-blue-without {
+            margin: auto;
+            align-content: center;
+            background-color: #2874A6;
+            width: 25%;
+            border-radius: 15px;
+        }
+
+        .simple {
+            margin-left: 0;
+            align-content: center;
+            background-color: unset;
+            opacity: 1;
+            width: auto;
+            border-radius: 0;
+        }
+
+        h3 {
+            padding-top: 15px;
+            text-align: center;
+            /*font-family: 'PT Sans Caption', sans-serif;*/
+            color: #EEF4D5;
+            text-shadow: #FDFEFE 0 0 4px;
+        }
+
+        .container {
+            padding-left: 200px;
+            width: 600px;
+            height: 500px;
+            opacity: 0.8;
+            background-color: #D4E6F1/*#FDEDEC*/;
+            display: block;
+        }
+        div.container {
+            overflow-y: auto;
+        }
+        .card {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            max-width: 300px;
+            min-width: 300px;
+            margin: auto;
+            padding-top: 20px;
+        }
+        /*.text {
+            font-size: 18px;
+            margin: auto;
+            align-content: center;
+            font-family: 'PT Sans Caption', sans-serif;
+            color: #EEF4D5;
+        }*/
+
+        input[type=text], select {
+            margin: auto;
+            width: 50%;
+        }
+
+        input[type=email], select {
+            margin: auto;
+            width: 50%;
+        }
+
+        input[type=password], select {
+            margin: auto;
+            width: 50%;
+        }
+
+        input[type=checkbox], select {
+            margin: auto;
+            width: 15px;
+            height: 15px;
+        }
+
+        input[type=number], select {
+            margin: auto;
+            width: 50%;
+        }
+
+        input[type=date], select {
+            margin: auto;
+            width: 50%;
+        }
+
+        .menu-main {
+            margin: auto;
+            margin-top: 0;
+            list-style: none;
+            padding-left: 0;
+            font-size: 18px;
+            text-align: center;
+            position: relative;
+            background-color: #2874A6;
+            opacity: 0.8;
+            width: 100%;
+        }
+
+            .menu-main li {
+                display: inline-block;
+            }
+
+            .menu-main a {
+                text-decoration: none;
+                display: inline-block;
+                margin: 0 15px;
+                padding: 10px 30px;
+                /*font-family: 'PT Sans Caption', sans-serif;*/
+                color: #EEF4D5;
+                transition: .3s linear;
+                position: relative;
+            }
+
+                .menu-main a:before,
+                .menu-main a:after {
+                    content: "";
+                    position: absolute;
+                    top: calc(50% - 3px);
+                    width: 6px;
+                    height: 6px;
+                    border-radius: 50%;
+                    background: #EEF4D5;
+                    opacity: 0;
+                    transition: .5s ease-in-out;
+                }
+
+                .menu-main a:before {
+                    left: 5px;
+                }
+
+                .menu-main a:after {
+                    right: 5px;
+                }
+
+                .menu-main a.current:before,
+                .menu-main a.current:after,
+                .menu-main a:hover:before,
+                .menu-main a:hover:after {
+                    opacity: 1;
+                }
+
+                .menu-main a.current,
+                .menu-main a:hover {
+                    color: #EEF4D5;
+                }
+    </style>
+</head>
+<body>
+
+    @*<ul class="menu-main">
+        <li>@Html.ActionLink("Add", "Create", "Employee")</li>
+        <li>@Html.ActionLink("Show", "GetAll", "Employee")</li>
+        <li>@Html.ActionLink("Register", "RegisterUser", "Authentication")</li>
+        <li>@Html.ActionLink("Sign in", "Login", "Authentication")</li>
+        <li>@Html.ActionLink("Page", "UserProfile", "Authentication")</li>
+    </ul>*@
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #2874A6; height: 40px;">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link" style="color: aliceblue" href="~/Authentication/RegisterUser">Sign up</a>
+                <a class="nav-item nav-link" style="color: aliceblue" href="~/Authentication/Login">Sign in</a>
+                <a class="nav-item nav-link" style="color: aliceblue" href="~/Employee/GetAll">Board<span class="sr-only">(current)</span></a>
+                <a class="nav-item nav-link" style="color: aliceblue" href="~/Authentication/UserProfile">Page</a>
+            </div>
+        </div>
+    </nav>
+    @RenderBody()
+    <br>
+    <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div style="padding-left: 60px; padding-top: 20px;">
+    <form method="get" action="~/Task/CommandBoard">
+        <input type="hidden" name="commandId" value="@ViewBag.CommandId">
+        <input type="submit" class="btn btn-warning" value="Back" \>
+    </form>
+</div>
+<div style="padding-top:90px;">
+    <form method="post" class="form-blue" action="~/Task/AddTask">
+        <h3 style="color: aliceblue">New task</h3>
+        <p>
+            <input class="form-control" type="text" name="task.Description" placeholder="Description" required />
+        </p>
+        <input type="hidden" name="task.CommandId" value="@ViewBag.CommandId">
+        <p>
+            @{
+                string name;
+                if (ViewBag.Employee.FirstName != null && ViewBag.Employee.SecondName != null)
+                {
+                    name = ViewBag.Employee.FirstName + " " + ViewBag.Employee.SecondName;
+                }
+                else
+                {
+                    name = ViewBag.Employee.Login;
+                }
+            }
+            <div class="input-group mb-3" style="padding-left: 95px;padding-right: 95px;">
+                <select class="custom-select" name="task.EmployeeId" value="@ViewBag.Employee.Id">
+                    <option selected value="@ViewBag.Employee.Id">@name</option>
+                    @foreach (var e in ViewBag.Employees)
+                    {
+                        if (ViewBag.Employee.Id != e.Id)
+                        {
+                            string n;
+                            if (e.FirstName != null && e.SecondName != null)
+                            {
+                                n = e.FirstName + " " + e.SecondName;
+                            }
+                            else
+                            {
+                                n = e.Login;
+                            }
+                            <option value="@e.Id">@n</option>
+                        }
+                    }
+                </select>
+            </div>
+        </p>
+        <p>
+            <input class="form-control" type="number" name="task.Complexity" placeholder="Complexity" min="0" max="23" oninvalid="setCustomValidity('Please, enter value >= 0 and <= 23')" required />
+        </p>
+        <p>
+            <div class="input-group mb-3" style="padding-left: 95px;padding-right: 95px;">
+                <select class="custom-select" name="task.Status">
+                    <option selected value="created">created</option>
+                    <option value="in progress">in progress</option>
+                    <option value="done">done</option>
+                </select>
+            </div>
+        </p>
+        <p>
+            <input class="form-control" type="date" name="task.End" required />
+        </p>
+
+        <p>
+            <div style="padding-bottom:15px; padding-left:155px;">
+                <input class="btn btn-warning" style="margin:auto; " type="submit" value="Add">
+            </div>
+        </p>
+    </form>
+</div>

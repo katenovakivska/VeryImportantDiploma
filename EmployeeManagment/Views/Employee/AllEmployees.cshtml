@@ -1,0 +1,372 @@
+﻿@model IEnumerable<EmployeeManagment.Models.UserProfile>
+
+<p style="padding-left: 60px; padding-top: 20px;">
+    <table>
+        <tr>
+            <td>
+                <a class="btn btn-warning" role="button" href="~/Employee/GetAll">
+                    Back
+                </a>
+            </td>
+            <td>
+                <a class="btn btn-warning" role="button" href="~/Employee/Search">
+                    Add employee
+                </a>
+            </td>
+            <td>
+                <form method="get" style="padding-left: 30px;padding-right: 30px;" action="~/Employee/DeleteEmployees">
+                    <table>
+                        <tr>
+                            <td>
+                                <div class="input-group">
+                                    <select class="form-select" id="inputGroupSelect01" name="employeeId" style="height: 35px; width: 180px; padding-top: 5px;">
+                                        <option selected>Choose employee</option>
+                                        @foreach (var e in Model)
+                                        {
+                                            string n;
+                                            if (e.FirstName != null && e.SecondName != null)
+                                            {
+                                                n = e.FirstName + " " + e.SecondName;
+                                            }
+                                            else
+                                            {
+                                                n = e.Login;
+                                            }
+                                            <option value="@e.Id">@n</option>
+                                        }
+                                        @foreach (var e in ViewBag.Free)
+                                        {
+                                            string n;
+                                            if (e.FirstName != null && e.SecondName != null)
+                                            {
+                                                n = e.FirstName + " " + e.SecondName;
+                                            }
+                                            else
+                                            {
+                                                n = e.Login;
+                                            }
+                                            <option value="@e.Id">@n</option>
+                                        }
+
+
+                                    </select>
+                                </div>
+                            </td>
+                            <td>
+                                <button class="btn btn-warning" type="submit" style="opacity:1.0">Delete</button>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </td>
+            <td>
+                <a class="btn btn-light" role="button" href="~/Check/CheckEmployees">
+                    Check
+                </a>
+            </td>
+        </tr>
+        </table>
+</p>
+@if (Model.Count() != 0)
+{
+    <h3 style="color:#2874A6">In commands</h3>
+
+    <table class="table-blue">
+        <tr>
+            <th>Login</th>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Command</th>
+            <th>Position</th>
+            @{
+                int column = 0; }
+            @if (ViewBag.NotSignificant.Contains(column))
+            {
+                <th style="background-color: #17A589;">Level</th>
+            }
+            else
+            {
+                <th>Level</th>
+            }
+            @{column++;}
+            @if (ViewBag.NotSignificant.Contains(column))
+            {
+                <th style="background-color: #17A589;">Work from home</th>
+            }
+            else
+            {
+                <th>Work from home</th>
+            }
+            @{column++;}
+            @if (ViewBag.NotSignificant.Contains(column))
+            {
+                <th style="background-color: #17A589;">Work from office</th>
+            }
+            else
+            {
+                <th>Work from office</th>
+            }
+            @{column++;}
+            @if (ViewBag.NotSignificant.Contains(column))
+            {
+                <th style="background-color: #17A589;">Experience</th>
+            }
+            else
+            {
+                <th>Experience</th>
+            }
+            @{column++;}
+            @if (ViewBag.NotSignificant.Contains(column))
+            {
+                <th style="background-color: #17A589;">Average task complexity</th>
+            }
+            else
+            {
+                <th>Average task complexity</th>
+            }
+
+        </tr>
+        @foreach (var user in Model)
+        {
+            if (user.CommandId != 0)
+            {
+                string level = "-";
+                string home = "-";
+                string work = "-";
+                int columnIndex = 0;
+                <tr>
+                    <td>@user.Login</td>
+                    <td>@user.FirstName</td>
+                    <td>@user.SecondName</td>
+                    <td>@ViewBag.Commands[user.CommandId - 1]</td>
+                    <td>@user.Position</td>
+                    @if (user.Level == 1)
+                    {
+                        level = "junior";
+                    }
+                    else if (user.Level == 2)
+                    {
+                        level = "middle";
+                    }
+                    else if (user.Level == 3)
+                    {
+                        level = "senior";
+                    }
+                    @if (ViewBag.NotSignificant.Contains(columnIndex))
+                    {
+                        <td style="background-color: #17A589;">@level</td>
+                    }
+                    else
+                    {
+                        <td>@level</td>
+                    }
+                    @{columnIndex++;}
+                    @if (user.AbilityToWorkInHome == 1)
+                    {
+                        home = "+";
+                    }
+                    @if (user.AbilityToWorkInOffice == 1)
+                    {
+                        work = "+";
+                    }
+                    @if (ViewBag.NotSignificant.Contains(columnIndex))
+                    {
+                        <td style="background-color: #17A589;">@home</td>
+                    }
+                    else
+                    {
+                        <td>@home</td>
+                    }
+                    @{columnIndex++;}
+                    @if (ViewBag.NotSignificant.Contains(columnIndex))
+                    {
+                        <td style="background-color: #17A589;">@work</td>
+                    }
+                    else
+                    {
+                        <td>@work</td>
+                    }
+                    @{columnIndex++;}
+                    @if (ViewBag.NotSignificant.Contains(columnIndex))
+                    {
+                        <td style="background-color: #17A589;">@user.Experience</td>
+                    }
+                    else
+                    {
+                        <td>@user.Experience</td>
+                    }
+                    @{columnIndex++; }
+                    @if (ViewBag.NotSignificant.Contains(columnIndex))
+                    {
+                        <td style="background-color: #17A589;">@user.AverageComplexityOfTasks</td>
+                    }
+                    else
+                    {
+                        <td>@user.AverageComplexityOfTasks</td>
+                    }
+
+                </tr>
+            }
+
+        }
+    </table>
+}
+@if (ViewBag.Free.Count != 0)
+{
+<h3 style="color:#2874A6">Without commands (Bayessian classifier)</h3>
+    <table class="table-blue">
+        <tr>
+            <th>Login</th>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Position</th>
+            @if (ViewBag.Group.Count != 0)
+            {
+                <th>Command</th>
+            }
+            <th>Level</th>
+            <th>Work from home</th>
+            <th>Work from office</th>
+            <th>Experience</th>
+            <th>Average task complexity</th>
+        </tr>
+        @foreach (var user in ViewBag.Free)
+        {
+            if (user.CommandId == 0)
+            {
+                string level = "-";
+                string home = "-";
+                string work = "-";
+                <tr>
+                    <td>@user.Login</td>
+                    <td>@user.FirstName</td>
+                    <td>@user.SecondName</td>
+                    <td>@user.Position</td>
+                    @if (ViewBag.Group.Count != 0)
+                    {
+                        <td>@ViewBag.Commands[ViewBag.Group[ViewBag.Free.IndexOf(user)] - 1]</td>
+                    }
+                    @if (user.Level == 1)
+                    {
+                        level = "junior";
+                    }
+                    else if (user.Level == 2)
+                    {
+                        level = "middle";
+                    }
+                    else if (user.Level == 3)
+                    {
+                        level = "senior";
+                    }
+                    <td>@level</td>
+                    @if (user.AbilityToWorkInHome == 1)
+                    {
+                        home = "+";
+                    }
+                    @if (user.AbilityToWorkInOffice == 1)
+                    {
+                        work = "+";
+                    }
+                    <td>@home</td>
+                    <td>@work</td>
+                    <td>@user.Experience</td>
+                    <td>@user.AverageComplexityOfTasks</td>
+                    <td>
+                        @if (ViewBag.Commands[ViewBag.Group[ViewBag.Free.IndexOf(user)] - 1] != "")
+                        {
+                            <form method="post" action="~/Employee/UpdateCommand">
+                                <input type="hidden" value="@user.Id" name="userId">
+                                <input type="hidden" value="@ViewBag.Group[ViewBag.Free.IndexOf(user)]" name="commandId">
+                                <input class="btn btn-warning" style="margin:auto; " type="submit" value="Update">
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+
+        }
+    </table>
+    <h3 style="color:#2874A6">Without commands (Tree of decision)</h3>
+    <table class="table-blue">
+        <tr>
+            <th>Login</th>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Position</th>
+            @if (ViewBag.GroupTree.Count != 0)
+            {
+                <th>Command</th>
+            }
+            <th>Level</th>
+            <th>Work from home</th>
+            <th>Work from office</th>
+            <th>Experience</th>
+            <th>Average task complexity</th>
+        </tr>
+        @foreach (var user in ViewBag.Free)
+        {
+            if (user.CommandId == 0)
+            {
+                string level = "-";
+                string home = "-";
+                string work = "-";
+                <tr>
+                    <td>@user.Login</td>
+                    <td>@user.FirstName</td>
+                    <td>@user.SecondName</td>
+                    <td>@user.Position</td>
+
+                    @if (ViewBag.Group.Count != 0)
+                    {
+                        <td>@ViewBag.Commands[ViewBag.GroupTree[ViewBag.Free.IndexOf(user)] - 1]</td>
+                    }
+                    @if (user.Level == 1)
+                    {
+                        level = "junior";
+                    }
+                    else if (user.Level == 2)
+                    {
+                        level = "middle";
+                    }
+                    else if (user.Level == 3)
+                    {
+                        level = "senior";
+                    }
+                    <td>@level</td>
+                    @if (user.AbilityToWorkInHome == 1)
+                    {
+                        home = "+";
+                    }
+                    @if (user.AbilityToWorkInOffice == 1)
+                    {
+                        work = "+";
+                    }
+                    <td>@home</td>
+                    <td>@work</td>
+                    <td>@user.Experience</td>
+                    <td>@user.AverageComplexityOfTasks</td>
+                    <td>
+                        @if (ViewBag.Commands[ViewBag.GroupTree[ViewBag.Free.IndexOf(user)] - 1] != "")
+                        {
+                            <form method="post" action="~/Employee/UpdateCommand">
+                                <input type="hidden" value="@user.Id" name="userId">
+                                <input type="hidden" value="@ViewBag.GroupTree[ViewBag.Free.IndexOf(user)]" name="commandId">
+                                <input class="btn btn-warning" style="margin:auto; " type="submit" value="Update">
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+
+        }
+    </table>
+
+    @foreach (var w in ViewBag.Warnings)
+    {
+        <h3 style="color:#E74C3C">@w</h3>
+    }
+}
+else
+{
+    <h3 style="color:#E74C3C">There is no free employees</h3>
+}

@@ -1,0 +1,112 @@
+﻿<p style="padding-left: 60px; padding-top: 20px;">
+    <table>
+    <tr>
+     <td>
+    <a class="btn btn-warning" role="button" href="~/Employee/GetAll">
+        Back
+    </a>
+     </td>
+     <td>
+    <form method="post" style="padding-left:30px;padding-right:30px;" action="~/Employee/UpdatePosition">
+        <table>
+            <tr>
+                <td>
+                    <div class="input-group">
+                        <select class="form-select" id="inputGroupSelect01" name="Id" style="height: 35px; width: 180px; padding-top: 5px;">
+                            <option selected>Choose employee</option>
+                            @foreach (var e in ViewBag.UserSkills)
+                            {
+                                string n;
+                                if (e.FirstName != null && e.SecondName != null)
+                                {
+                                    n = e.FirstName + " " + e.SecondName;
+                                }
+                                else
+                                {
+                                    n = e.Login;
+                                }
+                                <option value="@e.Id">@n</option>
+                            }
+                        </select>
+                    </div>
+                </td>
+                <td>
+                    <div class="input-group">
+                        <select class="form-select" id="inputGroupSelect01" name="NewPosition" style="height: 35px; width: 180px; padding-top: 5px;">
+                            <option selected>Choose position</option>
+                            @foreach (var name in ViewBag.GroupNames)
+                            {
+                                <option value="@name">@name</option>
+                            }
+                        </select>
+                    </div>
+                </td>
+                <td>
+                    <button class="btn btn-warning" type="submit" style="opacity:1.0">Add</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+         </td>
+        <td>
+    <a class="btn btn-light" role="button" href="~/Check/CheckPositions">
+        Check
+    </a>
+            </td>
+            </tr>
+        </table>
+</p>
+
+
+@if (ViewBag.UserSkills.Count != 0)
+{
+    <h3 style="color:#2874A6">Positions</h3>
+
+    <table class="table-blue">
+        <tr>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Login</th>
+            @foreach (var s in ViewBag.SkillNames)
+            {
+                <th>@s</th>
+            }
+            <th>Position</th>
+            <th>New position</th>
+            <th></th>
+        </tr>
+        @foreach (var user in ViewBag.UserSkills)
+        {
+            <tr>
+                <td>@user.FirstName</td>
+                <td>@user.SecondName</td>
+                <td>@user.Login</td>
+                @for (int i = 0; i < user.SkillEvaluations.GetLength(0); i++)
+                {
+                    <td>@user.SkillEvaluations[i]</td>
+                }
+
+                <td>@user.Position</td>
+                @if (user.NewPosition != user.Position && user.NewPosition != null)
+                {
+                    <td style="background-color:#17A589;">@user.NewPosition</td>
+                    <td>
+                        <form method="post" action="~/Employee/UpdatePosition">
+                            <input type="hidden" value="@user.Id" name="Id">
+                            <input type="hidden" value="@user.NewPosition" name="NewPosition">
+                            <input class="btn btn-warning" style="margin:auto; padding-bottom: 5px;" type="submit" value="Update">
+                        </form>
+                    </td>
+
+                }
+                else
+                {
+                    <td>@user.NewPosition</td>
+                    <td></td>
+                }
+            </tr>
+        }
+        <tr></tr>
+    </table>
+}
+

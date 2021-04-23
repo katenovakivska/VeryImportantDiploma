@@ -1,0 +1,53 @@
+﻿@model EmployeeManagment.Models.UserProfile
+
+@{
+    ViewData["Title"] = "Employee";
+}
+
+<div style="padding-top:95px;">
+    <form method="post">
+        <h3>Add employee</h3>
+        <p>
+            <label style="padding-left: 110px;">Email</label><br />
+            <input class="form-control" type="email" name="user.Email" required />
+        </p>
+        <p>
+            <label style="padding-left: 110px;">Password</label><br />
+            <input class="form-control" type="password" name="user.Password" required />
+        </p>
+
+        <p>
+            <label style="padding-left: 110px;">First name</label><br />
+            <input class="form-control" type="text" name="user.FirstName" required />
+        </p>
+        <p>
+            <label style="padding-left: 110px;">Second name</label><br />
+            <input class="form-control" type="text" name="user.SecondName" required />
+        </p>
+        @*<div style="padding-left: 155px;">
+            <p>
+                <input class="form-check-input" type="radio" name="level" id="exampleRadios1" value=1>
+                <label class="form-check-label" for="exampleRadios1">
+                    Junior
+                </label>
+            </p>
+            <p>
+                <input class="form-check-input" type="radio" name="level" id="exampleRadios2" value=2>
+                <label class="form-check-label" for="exampleRadios2">
+                    Middle
+                </label>
+            </p>
+            <p>
+                <input class="form-check-input" type="radio" name="level" id="exampleRadios3" value=3>
+                <label class="form-check-label" for="exampleRadios3">
+                    Senior
+                </label>
+            </p>
+        </div>*@
+        <p>
+            <div style="padding-bottom:15px; padding-left:165px;">
+                <input class="btn btn-warning" style="margin:auto" type="submit" value="Add">
+            </div>
+        </p>
+    </form>
+</div>

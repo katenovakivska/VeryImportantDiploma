@@ -1,0 +1,127 @@
+﻿@model IEnumerable<EmployeeManagment.Models.Task>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    @*<title>Warehouse</title>*@
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+</head>
+<body>
+    <br>
+    @*<div style="padding-top: 100px;">*@
+    <div style="padding-left: 60px;">
+        <table style="width: 200px;">
+            <tr>
+                <td>
+                    <a class="btn btn-warning" role="button" href="~/Employee/AllCommands">
+                        Back
+                    </a>
+                </td>
+                <td>
+                    <form method="get" action="~/Task/AddTask">
+                        <input type="hidden" name="commandId" value="@ViewBag.CommandId">
+                        <input type="submit" class="btn btn-warning" value="Add" \>
+                    </form>
+                </td>
+                <td>
+                    <form method="get" action="~/Task/Forecast">
+                        <input type="hidden" name="commandId" value="@ViewBag.CommandId">
+                        <input type="submit" class="btn btn-warning" value="Forecast" \>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <br>
+    <div class="container">
+        @if (Model.Count() != 0)
+        {
+            <br>
+            foreach (var t in Model)
+            {
+                var tname = t.Id.ToString() + ": " + t.Description;
+                string name;
+                @if (t.Employee.FirstName != null && t.Employee.SecondName != null)
+                {
+                    name = t.Employee.FirstName + " " + t.Employee.SecondName;
+                }
+                else
+                {
+                    name = t.Employee.Login;
+                }
+                <div class="card">
+                    <table style="align-self: center;">
+                        <tr>
+                            <td style="color: #D98880;">
+                                @tname
+                            </td>
+                        </tr>
+                        <tr>
+
+                            @if (t.Employee.Picture != null)
+                            {
+                                <td><img style="width:50px; height:50px;border-radius:50%;" src="@t.Employee.PictureConverted" />@name</td>
+                            }
+                            else
+                            {
+                                <td><img style="width:50px; height:50px;border-radius:50%;" src="~/StaticFiles/unicorn.jpg" />@name</td>
+                            }
+
+                            @*<td>@name</td>*@
+                        </tr>
+                        <tr>
+                            <td>Status: @t.Status</td>
+                        </tr>
+                        <tr>
+                            <td>Complexity: @t.Complexity</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @if (t.End == t.Start)
+                                {
+                                    @t.Start.ToString("yyyy-MM-dd")
+                                }
+                                else
+                                {
+                                    var s = t.Start.ToString("yyyy-MM-dd") + " - " + t.End.ToString("yyyy-MM-dd");
+                                    @s
+                                }
+                            </td>
+                        </tr>
+
+                    </table>
+                    <div class="center-button">
+                        <form method="get" action="~/Task/UpdateTask">
+                            <input type="hidden" name="taskId" value="@t.Id">
+                            <input type="submit" class="btn btn-warning" value="Update" \>
+                        </form>
+                        <form style="padding-left: 10px;" method="get" action="~/Task/CloseTask">
+                            <input type="hidden" name="taskId" value="@t.Id">
+                            <input type="submit" class="btn btn-light" value="Close" \>
+                        </form>
+                    </div>
+                    <br>
+
+                </div>
+
+
+            }
+            <br>
+        }
+        else
+        {
+            <h3 style="color:#E74C3C">There is no tasks for this week</h3>
+        }
+    </div>
+
+    @*</div>*@
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+﻿@model EmployeeManagment.Models.UserProfile
+@{
+    ViewData["Title"] = "GetAll";
+}
+@*#AADEF3*@
+<!DOCTYPE html>
+
+<html>
+<head>
+    @*<title>Warehouse</title>*@
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+</head>
+<body style="height: 200%">
+    <div style="background-color: #AED6F1; opacity: 0.8; padding-bottom:20px;">
+        <div style="padding-top: 60px; padding-left: 60px;">
+            <table>
+                <tr>
+                    @{
+                        if (Model.Picture != null)
+                        {
+                            <td><img style="width:180px; height:180px;" src="@Model.PictureConverted" /></td>
+                        }
+                        else
+                        {
+                            <td><img style="width:180px; height:180px;" src="~/StaticFiles/unicorn.jpg" /></td>
+                        }
+                    }
+
+                    <td style="padding-left: 70px;">
+                        <form method="post" action="~/Authentication/ChangePhoto" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="newPicture">Change photo</label>
+                                <input type="file" class="form-control-file" id="newPicture" name="NewPicture">
+                                <input type="hidden" name="Id" value="@Model.Id">
+                            </div>
+                            <input class="btn btn-warning" style="margin:auto; " type="submit" value="Change photo">
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div style="padding-top: 60px; padding-left: 60px;">
+            @*<h3 style="padding-bottom:20px;">Personal info</h3>*@
+            <p style="font-size:18px;">Email: @Model.Email</p>
+            <p style="font-size:18px;">Login: @Model.Login</p>
+            @if (Model.FirstName != null && Model.SecondName != null)
+            {
+                <p style="font-size:18px;">Name: @Model.FirstName</p>
+                <p style="font-size:18px;">Surname: @Model.SecondName</p>
+            }
+            @if (Model.Level != 0)
+            {
+                string level = "junior";
+                switch (Model.Level)
+                {
+                    case 2:
+                        level = "middle";
+                        break;
+                    case 3:
+                        level = "senior";
+                        break;
+                }
+                <p style="font-size:18px;">Level: @level</p>
+            }
+
+            @{
+                string workHome = "";
+                switch (Model.AbilityToWorkInHome)
+                {
+                    case 0:
+                        workHome = "no";
+                        break;
+                    case 1:
+                        workHome = "yes";
+                        break;
+                }
+                <p style="font-size:18px;">Have ability to work in home: @workHome</p>
+                string workOffice = "";
+                switch (Model.AbilityToWorkInOffice)
+                {
+                    case 0:
+                        workOffice = "no";
+                        break;
+                    case 1:
+                        workOffice = "yes";
+                        break;
+                }
+                <p style="font-size:18px;">Have ability to work in office: @workOffice</p>
+            }
+            @if (Model.Experience != 0)
+            {
+                <p style="font-size:18px;">Experience: @Model.Experience</p>
+            }
+            @if (Model.AverageComplexityOfTasks != 0)
+            {
+                <p style="font-size:18px;">Average complexity of tasks: @Model.AverageComplexityOfTasks</p>
+            }
+            @if (Model.CommandId != 0)
+            {
+                <p style="font-size:18px;">Command: @Model.CommandId</p>
+            }
+        </div>
+
+        <div style="padding-left: 65px;">
+            <form method="get" action="~/Authentication/UpdateProfile">
+                <input type="hidden" name="id" value="@Model.Id">
+                <input type="submit" class="btn btn-warning" value="Update" \>
+            </form>
+        </div>
+        <div style="padding-top: 60px; padding-left: 60px;">
+            @foreach (var s in ViewBag.Skills)
+            {
+                foreach (var e in ViewBag.EmployeeSkills)
+                {
+                    if (s.Id == e.SkillId)
+                    {
+                        <p style="font-size:18px;">@s.SkillName: @e.Mark</p>
+                    }
+                }
+            }
+        </div>
+        <div style="padding-left: 65px;">
+            <form method="get" action="~/Authentication/UpdateSkills">
+                <input type="hidden" name="id" value="@Model.Id">
+                <input type="submit" class="btn btn-warning" value="Update" \>
+            </form>
+        </div>
+    </div>
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+</body>
+</html>

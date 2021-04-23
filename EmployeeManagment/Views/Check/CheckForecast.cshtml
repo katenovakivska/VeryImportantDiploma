@@ -1,0 +1,432 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<!DOCTYPE HTML>
+<html>
+<head>
+    <script>
+window.onload = function () {
+	var result = @Html.Raw(ViewBag.DataPoints);
+	var dataPoints = [];
+    var forecast = @Html.Raw(ViewBag.ForecastPoints);
+    var check = @Html.Raw(ViewBag.ForecastPoints1);
+	var forecastPoints = [];
+    var complexityPoints = [];
+    var productivityPoints = [];
+    var forecastPoints1 = [];
+    var forecastPoints2 = [];
+    var checkPoints = [];
+    var checkPoints1 = [];
+    var checkPoints2 = [];
+
+	for(var i = 0; i < result.length; i++){
+        dataPoints.push({ x: new Date(result[i].year, result[i].month - 1, result[i].day), y: result[i].amount });
+        complexityPoints.push({ x: new Date(result[i].year, result[i].month - 1, result[i].day), y: result[i].complexity });
+        productivityPoints.push({ x: new Date(result[i].year, result[i].month - 1, result[i].day), y: result[i].productivity });
+	}
+    for (var i = 0; i < forecast.length; i++) {
+        forecastPoints.push({ x: new Date(forecast[i].year, forecast[i].month - 1, forecast[i].day), y: forecast[i].amount });
+        forecastPoints1.push({ x: new Date(forecast[i].year, forecast[i].month - 1, forecast[i].day), y: forecast[i].complexity });
+        forecastPoints2.push({ x: new Date(forecast[i].year, forecast[i].month - 1, forecast[i].day), y: forecast[i].productivity });
+    }
+    for (var i = 0; i < check.length; i++) {
+        checkPoints.push({ x: new Date(check[i].year, check[i].month - 1, check[i].day), y: check[i].amount });
+        checkPoints1.push({ x: new Date(check[i].year, check[i].month - 1, check[i].day), y: check[i].complexity });
+        checkPoints2.push({ x: new Date(check[i].year, check[i].month - 1, check[i].day), y: check[i].productivity });
+    }
+	var chart = new CanvasJS.Chart("chartContainer", {
+        animationEnabled: true,
+        theme: "light2",
+		title: {
+			text: "Forecast amount of done tasks"
+        },
+        legend: {
+            itemclick: toggleDataSeries
+        },
+		axisX: {
+			valueFormatString: "DD MMM YYYY",
+            title: "Number of week",
+			crosshair: {
+				enabled: true,
+				snapToDataPoint: true
+			}
+		},
+		axisY: {
+			title: "Amount of done tasks",
+			crosshair: {
+				enabled: true,
+				snapToDataPoint: true
+			}
+		},
+		data: [{
+            type: "stackedArea",
+            name: "History",
+            showInLegend: true,
+			xValueFormatString: "DD MMM YYYY",
+            dataPoints: dataPoints,
+        },
+            {
+                type: "stackedArea",
+                name: "Exponential Smoothing",
+                showInLegend: true,
+                axisYType: "secondary",
+                xValueFormatString: "DD MMM YYYY",
+                dataPoints: checkPoints,
+            },
+            {
+                type: "stackedArea",
+                name: "Arima",
+                showInLegend: true,
+                xValueFormatString: "DD MMM YYYY",
+                dataPoints: forecastPoints,
+            }]
+	});
+    var chart1 = new CanvasJS.Chart("chartContainer1", {
+        animationEnabled: true,
+        theme: "light2",
+        title: {
+            text: "Forecast average complexity of done tasks"
+        },
+        axisX: {
+            valueFormatString: "DD MMM YYYY",
+            title: "Number of week",
+            crosshair: {
+                enabled: true,
+                snapToDataPoint: true
+            }
+        },
+        axisY: {
+            title: "Average complexity of done tasks",
+            crosshair: {
+                enabled: true,
+                snapToDataPoint: true
+            }
+        },
+        data: [{
+            type: "stackedArea",
+            name: "History",
+            xValueFormatString: "DD MMM YYYY",
+            dataPoints: complexityPoints,
+            showInLegend: true,
+        },
+            {
+                type: "stackedArea",
+                name: "Exponential Smoothing",
+                xValueFormatString: "DD MMM YYYY",
+                axisYType: "secondary",
+                dataPoints: checkPoints1,
+                showInLegend: true,
+            },
+        {
+            type: "stackedArea",
+            name: "Arima",
+            xValueFormatString: "DD MMM YYYY",
+            axisYIndex: 0,
+            dataPoints: forecastPoints1,
+            showInLegend: true,
+            },
+            ]
+    });
+
+    var chart2 = new CanvasJS.Chart("chartContainer2", {
+        animationEnabled: true,
+        theme: "light2",
+        title: {
+            text: "Forecast productivity"
+        },
+        axisX: {
+            valueFormatString: "DD MMM YYYY",
+            title: "Number of week",
+            crosshair: {
+                enabled: true,
+                snapToDataPoint: true
+            }
+        },
+        axisY: {
+            title: "Average complexity of done tasks",
+            crosshair: {
+                enabled: true,
+                snapToDataPoint: true
+            }
+        },
+        data: [{
+            type: "stackedArea",
+            name: "History",
+            xValueFormatString: "DD MMM YYYY",
+            dataPoints: productivityPoints,
+            showInLegend: true,
+        },
+        {
+            type: "stackedArea",
+            name: "Exponential Smoothing",
+            xValueFormatString: "DD MMM YYYY",
+            axisYType: "secondary",
+            dataPoints: checkPoints2,
+            showInLegend: true,
+        },
+        {
+            type: "stackedArea",
+            name: "Arima",
+            xValueFormatString: "DD MMM YYYY",
+            axisYIndex: 0,
+            dataPoints: forecastPoints2,
+            showInLegend: true,
+        },
+        ]
+    });
+
+    chart.render();
+    chart1.render();
+    chart2.render();
+    function toggleDataSeries(e) {
+        if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+            e.dataSeries.visible = false;
+        } else {
+            e.dataSeries.visible = true;
+        }
+        e.chart.render();
+    }
+}
+    </script>
+</head>
+<body>
+    <p>
+        <div style="padding-left: 60px; padding-top: 20px;">
+            <table>
+                <tr>
+                    <td>
+                        <form method="get" action="~/Task/Forecast">
+                            <input type="hidden" name="commandId" value="@ViewBag.CommandId">
+                            <input type="submit" class="btn btn-warning" value="Back" \>
+                        </form>
+                    </td>
+                    <td style="padding-top: 7px;">
+
+                        <form method="get" action="~/Check/CheckForecast" style="width: 300px; ">
+                            <input type="hidden" name="commandId" value="@ViewBag.CommandId">
+                            <div class="input-group mb-3" style="padding-top: 10px; padding-left: 10px;">
+                                <input type="number" class="form-control" placeholder="Amount of weeks" aria-label="Amount of weeks" aria-describedby="basic-addon2" name="amountOfWeeks">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="submit">Check</button>
+                                </div>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </p>
+    <p>
+        <div class="input-group" style="width: 25%;right: -75%">
+            <input type="text" class="form-control" aria-label="Persistance" value="@(100 - ViewBag.Deviation)" disabled>
+            <span class="input-group-text">Accuracy of amount</span>
+        </div>
+        <div class="input-group" style="width: 25%;right: -75%">
+            <input type="text" class="form-control" aria-label="Accuracy" value="@(100 - ViewBag.Deviation1)" disabled>
+            <span class="input-group-text">Accuracy of complexity</span>
+        </div>
+        <div class="input-group" style="width: 25%;right: -75%">
+            <input type="text" class="form-control" aria-label="AccuracyP" value="@(100 - ViewBag.Deviation2)" disabled>
+            <span class="input-group-text">Accuracy of productivity</span>
+        </div>
+    </p>
+    <div id="chartContainer2" style="height: 370px; width: 100%; padding-top: 20px;"></div>
+    <div id="chartContainer" style="height: 370px; width: 100%; padding-top: 80px;"></div>
+    <div id="chartContainer1" style="height: 370px; width: 100%; padding-top: 140px;"></div>
+
+    <p style="padding-top: 160px;">
+        <h3 style="color:#2874A6">Time of work for Arima (in milliseconds)</h3>
+        <table class="table-blue" style="width:50%; margin-left: auto; margin-right: auto;">
+            <tr>
+                <th>Amount</th>
+                <th>Experiment1</th>
+                <th>Experiment2</th>
+                <th>Experiment3</th>
+                <th>Experiment4</th>
+                <th>Average value</th>
+            </tr>
+            @foreach (var s in ViewBag.TimeArima)
+            {
+                <tr>
+                    <td>@s.Amount</td>
+                    <td>@s.Value1</td>
+                    <td>@s.Value2</td>
+                    <td>@s.Value3</td>
+                    <td>@s.Value4</td>
+                    <td>@s.Avg</td>
+                </tr>
+            }
+        </table>
+    </p>
+    <p>
+        <h3 style="color:#2874A6">Time of work for Exponential Smoothing (in milliseconds)</h3>
+        <table class="table-blue" style="width:50%; margin-left: auto; margin-right: auto;">
+            <tr>
+                <th>Amount</th>
+                <th>Experiment1</th>
+                <th>Experiment2</th>
+                <th>Experiment3</th>
+                <th>Experiment4</th>
+                <th>Average value</th>
+            </tr>
+            @foreach (var s in ViewBag.TimeExp)
+            {
+                <tr>
+                    <td>@s.Amount</td>
+                    <td>@s.Value1</td>
+                    <td>@s.Value2</td>
+                    <td>@s.Value3</td>
+                    <td>@s.Value4</td>
+                    <td>@s.Avg</td>
+                </tr>
+            }
+        </table>
+    </p>
+    <p>
+        <h3 style="color:#2874A6">Efficiency</h3>
+        <table class="table-blue" style="width:50%; margin-left: auto; margin-right: auto;">
+            <tr>
+                <th>Amount</th>
+                <th>Time Arima</th>
+                <th>Time Exponential Smoothing</th>
+                <th>SpeedUp</th>
+            </tr>
+            @foreach (var s in ViewBag.Efficiency)
+            {
+                <tr>
+                    <td>@s.Amount</td>
+                    <td>@s.Value1</td>
+                    <td>@s.Value2</td>
+                    <td>@s.SpeedUp</td>
+                </tr>
+            }
+        </table>
+    </p>
+    <p>
+        <h3 style="color:#2874A6">Check productivity forecast</h3>
+        <table class="table-blue">
+            <tr>
+                <th>History</th>
+                <th>Arima</th>
+                <th>Exponential Smoothing</th>
+                <th>Deviation</th>
+            </tr>
+            @foreach (var result in ViewBag.Productivities)
+            {
+
+                <tr>
+                    <td>
+                        [
+                        @for (int i = 0; i < result.History.Length; i++)
+                        {
+                            @(result.History[i].ToString()+" ")
+                        }
+                        ]
+                    </td>
+                    <td>
+                        [
+                        @for (int i = 0; i < result.Forecast1.Length; i++)
+                        {
+                            @(result.Forecast1[i].ToString() + " ")
+                        }
+                        ]
+                    </td>
+                    <td>
+                        [
+                        @for (int i = 0; i < result.Forecast2.Length; i++)
+                        {
+                            @(result.Forecast2[i].ToString() + " ")
+                        }
+                        ]
+                    </td>
+                    <td>@result.Deviation</td>
+                </tr>
+            }
+        </table>
+    </p>
+    <div>
+        <h3 style="color:#2874A6">Check  amount of tasks forecast</h3>
+        <table class="table-blue">
+            <tr>
+                <th>History</th>
+                <th>Arima</th>
+                <th>Exponential Smoothing</th>
+                <th>Deviation</th>
+            </tr>
+            @foreach (var result in ViewBag.Amounts)
+            {
+                <tr>
+                    <td>
+                        [
+                        @for (int i = 0; i < result.History.Length; i++)
+                        {
+                            @(result.History[i].ToString()+" ")
+                        }
+                        ]
+                    </td>
+                    <td>
+                        [
+                        @for (int i = 0; i < result.Forecast1.Length; i++)
+                        {
+                            @(result.Forecast1[i].ToString() + " ")
+                        }
+                        ]
+                    </td>
+                    <td>
+                        [
+                        @for (int i = 0; i < result.Forecast2.Length; i++)
+                        {
+                            @(result.Forecast2[i].ToString() + " ")
+                        }
+                        ]
+                    </td>
+                    <td>@result.Deviation</td>
+                </tr>
+            }
+        </table>
+    </div>
+    <div>
+        <h3 style="color:#2874A6">Check  average complexity of tasks forecast</h3>
+        <table class="table-blue">
+            <tr>
+                <th>History</th>
+                <th>Arima</th>
+                <th>Exponential Smoothing</th>
+                <th>Deviation</th>
+            </tr>
+            @foreach (var result in ViewBag.Complexities)
+            {
+                <tr>
+                    <td>
+                        [
+                        @for (int i = 0; i < result.History.Length; i++)
+                        {
+                            @(result.History[i].ToString()+" ")
+                        }
+                        ]
+                    </td>
+                    <td>
+                        [
+                        @for (int i = 0; i < result.Forecast1.Length; i++)
+                        {
+                            @(result.Forecast1[i].ToString() + " ")
+                        }
+                        ]
+                    </td>
+                    <td>
+                        [
+                        @for (int i = 0; i < result.Forecast2.Length; i++)
+                        {
+                            @(result.Forecast2[i].ToString() + " ")
+                        }
+                        ]
+                    </td>
+                    <td>@result.Deviation</td>
+                </tr>
+            }
+        </table>
+    </div>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+</body>

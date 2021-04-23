@@ -1,0 +1,279 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<!DOCTYPE HTML>
+<html>
+<head>
+    <script>
+window.onload = function () {
+	var result = @Html.Raw(ViewBag.DataPoints);
+    var dataPoints = [];
+    var productivityPoints = [];
+    var forecast = @Html.Raw(ViewBag.ForecastPoints);
+    var forecast1 = @Html.Raw(ViewBag.ForecastPoints1);
+	var forecastPoints = [];
+    var complexityPoints = [];
+    var forecastPoints1 = [];
+    var forecastPoints2 = [];
+    var forecastPointsExp = [];
+    var forecastPointsExp1 = [];
+    var forecastPointsExp2 = [];
+
+	for(var i = 0; i < result.length; i++){
+        dataPoints.push({ x: new Date(result[i].year, result[i].month - 1, result[i].day), y: result[i].amount });
+        complexityPoints.push({ x: new Date(result[i].year, result[i].month - 1, result[i].day), y: result[i].complexity });
+        productivityPoints.push({ x: new Date(result[i].year, result[i].month - 1, result[i].day), y: result[i].productivity });
+	}
+    for (var i = 0; i < forecast.length; i++) {
+        forecastPoints.push({ x: new Date(forecast[i].year, forecast[i].month - 1, forecast[i].day), y: forecast[i].amount });
+        forecastPoints1.push({ x: new Date(forecast[i].year, forecast[i].month - 1, forecast[i].day), y: forecast[i].complexity });
+        forecastPoints2.push({ x: new Date(forecast[i].year, forecast[i].month - 1, forecast[i].day), y: forecast[i].productivity });
+        forecastPointsExp.push({ x: new Date(forecast1[i].year, forecast1[i].month - 1, forecast1[i].day), y: forecast1[i].amount });
+        forecastPointsExp1.push({ x: new Date(forecast1[i].year, forecast1[i].month - 1, forecast1[i].day), y: forecast1[i].complexity });
+        forecastPointsExp2.push({ x: new Date(forecast1[i].year, forecast1[i].month - 1, forecast1[i].day), y: forecast1[i].productivity });
+    }
+	var chart = new CanvasJS.Chart("chartContainer", {
+		animationEnabled: true,
+        theme: "light2",
+		title: {
+			text: "Forecast amount of done tasks (ARIMA)"
+		},
+		axisX: {
+			valueFormatString: "DD MMM YYYY",
+            title: "Number of week",
+			crosshair: {
+				enabled: true,
+				snapToDataPoint: true
+			}
+		},
+		axisY: {
+			title: "Amount of done tasks",
+			crosshair: {
+				enabled: true,
+				snapToDataPoint: true
+			}
+		},
+		data: [{
+            type: "stackedArea",
+			xValueFormatString: "DD MMM YYYY",
+            dataPoints: dataPoints,
+		},
+            {
+                type: "stackedArea",
+                xValueFormatString: "DD MMM YYYY",
+                dataPoints: forecastPoints,
+            }]
+    });
+    var chartExp = new CanvasJS.Chart("chartContainerExp", {
+        animationEnabled: true,
+        theme: "light2",
+        title: {
+            text: "Forecast amount of done tasks (Exponential Smoothing)"
+        },
+        axisX: {
+            valueFormatString: "DD MMM YYYY",
+            title: "Number of week",
+            crosshair: {
+                enabled: true,
+                snapToDataPoint: true
+            }
+        },
+        axisY: {
+            title: "Amount of done tasks",
+            crosshair: {
+                enabled: true,
+                snapToDataPoint: true
+            }
+        },
+        data: [{
+            type: "stackedArea",
+            xValueFormatString: "DD MMM YYYY",
+            dataPoints: dataPoints,
+        },
+        {
+            type: "stackedArea",
+            xValueFormatString: "DD MMM YYYY",
+            dataPoints: forecastPointsExp,
+        }]
+    });
+    var chart1 = new CanvasJS.Chart("chartContainer1", {
+        animationEnabled: true,
+        theme: "light2",
+        title: {
+            text: "Forecast average complexity of done tasks (ARIMA)"
+        },
+        axisX: {
+            valueFormatString: "DD MMM YYYY",
+            title: "Number of week",
+            crosshair: {
+                enabled: true,
+                snapToDataPoint: true
+            }
+        },
+        axisY: {
+            title: "Average complexity of done tasks",
+            crosshair: {
+                enabled: true,
+                snapToDataPoint: true
+            }
+        },
+        data: [{
+            type: "stackedArea",
+            xValueFormatString: "DD MMM YYYY",
+            dataPoints: complexityPoints
+        },
+        {
+            type: "stackedArea",
+            xValueFormatString: "DD MMM YYYY",
+            dataPoints: forecastPoints1,
+        }]
+    });
+    var chartExp1 = new CanvasJS.Chart("chartContainerExp1", {
+        animationEnabled: true,
+        theme: "light2",
+        title: {
+            text: "Forecast average complexity of done tasks (Exponential Smoothing)"
+        },
+        axisX: {
+            valueFormatString: "DD MMM YYYY",
+            title: "Number of week",
+            crosshair: {
+                enabled: true,
+                snapToDataPoint: true
+            }
+        },
+        axisY: {
+            title: "Average complexity of done tasks",
+            crosshair: {
+                enabled: true,
+                snapToDataPoint: true
+            }
+        },
+        data: [{
+            type: "stackedArea",
+            xValueFormatString: "DD MMM YYYY",
+            dataPoints: complexityPoints
+        },
+        {
+            type: "stackedArea",
+            xValueFormatString: "DD MMM YYYY",
+            dataPoints: forecastPointsExp1,
+        }]
+    });
+    var chart2 = new CanvasJS.Chart("chartContainer2", {
+        animationEnabled: true,
+        theme: "light2",
+        title: {
+            text: "Forecast of productivity (ARIMA)"
+        },
+        axisX: {
+            valueFormatString: "DD MMM YYYY",
+            title: "Number of week",
+            crosshair: {
+                enabled: true,
+                snapToDataPoint: true
+            }
+        },
+        axisY: {
+            title: "Productivity",
+            crosshair: {
+                enabled: true,
+                snapToDataPoint: true
+            }
+        },
+        data: [{
+            type: "stackedArea",
+            xValueFormatString: "DD MMM YYYY",
+            dataPoints: productivityPoints
+        },
+        {
+            type: "stackedArea",
+            xValueFormatString: "DD MMM YYYY",
+            dataPoints: forecastPoints2,
+        }]
+    });
+    var chartExp2 = new CanvasJS.Chart("chartContainerExp2", {
+        animationEnabled: true,
+        theme: "light2",
+        title: {
+            text: "Forecast of productivity (Exponential Smoothing)"
+        },
+        axisX: {
+            valueFormatString: "DD MMM YYYY",
+            title: "Number of week",
+            crosshair: {
+                enabled: true,
+                snapToDataPoint: true
+            }
+        },
+        axisY: {
+            title: "Productivity",
+            crosshair: {
+                enabled: true,
+                snapToDataPoint: true
+            }
+        },
+        data: [{
+            type: "stackedArea",
+            xValueFormatString: "DD MMM YYYY",
+            dataPoints: productivityPoints
+        },
+        {
+            type: "stackedArea",
+            xValueFormatString: "DD MMM YYYY",
+            dataPoints: forecastPointsExp2,
+        }]
+    });
+    chart2.render();
+    chartExp2.render();
+    chart.render();
+    chartExp.render();
+    chart1.render();
+    chartExp1.render();
+}
+    </script>
+</head>
+<body>
+
+    <div style="padding-left: 60px; padding-top: 20px;">
+        <table>
+            <tr>
+                <td>
+                    <form method="get" action="~/Task/CommandBoard">
+                        <input type="hidden" name="commandId" value="@ViewBag.CommandId">
+                        <input type="submit" class="btn btn-warning" value="Back" \>
+                    </form>
+                </td>
+                <td>
+                    <form method="get" action="~/Check/CheckForecast">
+                        <input type="hidden" name="commandId" value="@ViewBag.CommandId">
+                        <input type="submit" class="btn btn-light" value="Check" \>
+                    </form>
+                </td>
+                <td style="padding-top: 7px;">
+
+                    <form method="get" action="~/Task/Forecast" style="width: 300px; ">
+                        <input type="hidden" name="commandId" value="@ViewBag.CommandId">
+                        <div class="input-group mb-3" style="padding-top: 10px; padding-left: 10px;">
+                            <input type="number" class="form-control" placeholder="Amount of weeks" aria-label="Amount of weeks" aria-describedby="basic-addon2" name="amountOfWeeks">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="submit">Forecast</button>
+                            </div>
+                        </div>
+                    </form>
+                </td>
+
+            </tr>
+        </table>
+    </div>
+    <div id="chartContainer2" style="height: 370px; width: 100%; padding-top: 20px;"></div>
+    <div id="chartContainerExp2" style="height: 370px; width: 100%; padding-top: 80px;"></div>
+    <div id="chartContainer" style="height: 370px; width: 100%; padding-top: 140px;"></div>
+    <div id="chartContainerExp" style="height: 370px; width: 100%; padding-top: 200px;"></div>
+    <div id="chartContainer1" style="height: 370px; width: 100%; padding-top: 260px;"></div>
+    <div id="chartContainerExp1" style="height: 370px; width: 100%; padding-top: 320px;"></div>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+</body>
+</html>

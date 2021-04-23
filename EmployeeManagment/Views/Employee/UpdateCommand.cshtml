@@ -1,0 +1,18 @@
+﻿@model EmployeeManagment.Models.Command
+<div style="padding-top:135px;">
+    <form method="post" class="form-blue" action="~/Employee/UpdateCommands">
+        <h3 style="color: aliceblue;">Update command</h3>
+        <p>
+            <input class="form-control" type="text" name="command.Name" placeholder="Name" value="@Model.Name" required />
+        </p>
+        <p>
+            <input class="form-control" type="text" name="command.Description" placeholder="Description" value="@Model.Description" required />
+        </p>
+        <input type="hidden" name="command.Id" value="@Model.Id">
+        <p>
+            <div style="padding-bottom:15px; padding-left:155px;">
+                <input class="btn btn-warning" style="margin:auto; " type="submit" value="Update">
+            </div>
+        </p>
+    </form>
+</div>
