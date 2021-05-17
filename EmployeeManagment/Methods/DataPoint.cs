@@ -15,7 +15,7 @@ namespace EmployeeManagment.Methods
 			Year = x.Year;
 			Day = x.Day;
 			Month = x.Month;
-			Amount = (int)Math.Round(amount, 0);
+			Amount = amount;
 			AvgComplexity = avgComplexity;
 			Productivity = avgComplexity * amount;
 		}
@@ -30,7 +30,7 @@ namespace EmployeeManagment.Methods
 		public int Month;
 
 		[DataMember(Name = "amount")]
-		public int Amount;
+		public double Amount;
 
 		[DataMember(Name = "complexity")]
 		public double AvgComplexity;

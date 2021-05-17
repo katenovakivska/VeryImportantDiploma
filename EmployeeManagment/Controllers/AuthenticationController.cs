@@ -79,22 +79,6 @@ namespace EmployeeManagment.Controllers
             bool isLogin = (model.Password == user.Password) ? true : false;
             if (user != null && isLogin)
             {
-
-
-                /*var tokenDescriptor = new SecurityTokenDescriptor
-                {
-                    Subject = new ClaimsIdentity(new Claim[]
-                    {
-                        new Claim("UserID",user.Id.ToString())
-                    }),
-                    Expires = DateTime.UtcNow.AddDays(2),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("1234567890123456")), SecurityAlgorithms.HmacSha256Signature)
-                };
-
-                var tokenHandler = new JwtSecurityTokenHandler();
-
-                var securityToken = tokenHandler.CreateToken(tokenDescriptor);
-                var token = tokenHandler.WriteToken(securityToken);*/
                 HttpContext.Session.SetString(SessionName, user.Login);
                 int id = db.UserProfiles.Where(x => x.Login == user.Login).FirstOrDefault().Id;
                 HttpContext.Session.SetString(SessionId, id.ToString());

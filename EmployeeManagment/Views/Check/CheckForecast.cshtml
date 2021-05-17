@@ -20,6 +20,16 @@ window.onload = function () {
     var checkPoints = [];
     var checkPoints1 = [];
     var checkPoints2 = [];
+    var time1 = @Html.Raw(ViewBag.TimePoints1);
+    var time2 = @Html.Raw(ViewBag.TimePoints2);
+    var timePoints1 = [];
+    var timePoints2 = [];
+    var bottomProductivity = @Html.Raw(ViewBag.BottomProductivity); var topProductivity = @Html.Raw(ViewBag.TopProductivity);
+    var confidenceInterval1 = []; var confidenceInterval1_ = [];
+    var bottomAmount = @Html.Raw(ViewBag.BottomAmount); var topAmount = @Html.Raw(ViewBag.TopAmount);
+    var confidenceInterval2 = []; var confidenceInterval2_ = [];
+    var bottomComplexity = @Html.Raw(ViewBag.BottomComplexity); var topComplexity = @Html.Raw(ViewBag.TopComplexity);
+    var confidenceInterval3 = []; var confidenceInterval3_ = [];
 
 	for(var i = 0; i < result.length; i++){
         dataPoints.push({ x: new Date(result[i].year, result[i].month - 1, result[i].day), y: result[i].amount });
@@ -30,24 +40,45 @@ window.onload = function () {
         forecastPoints.push({ x: new Date(forecast[i].year, forecast[i].month - 1, forecast[i].day), y: forecast[i].amount });
         forecastPoints1.push({ x: new Date(forecast[i].year, forecast[i].month - 1, forecast[i].day), y: forecast[i].complexity });
         forecastPoints2.push({ x: new Date(forecast[i].year, forecast[i].month - 1, forecast[i].day), y: forecast[i].productivity });
+        confidenceInterval1.push({ x: new Date(forecast[i].year, forecast[i].month - 1, forecast[i].day), y: bottomProductivity });
+        confidenceInterval1_.push({ x: new Date(forecast[i].year, forecast[i].month - 1, forecast[i].day), y: topProductivity });
+        confidenceInterval2.push({ x: new Date(forecast[i].year, forecast[i].month - 1, forecast[i].day), y: bottomAmount });
+        confidenceInterval2_.push({ x: new Date(forecast[i].year, forecast[i].month - 1, forecast[i].day), y: topAmount });
+        confidenceInterval3.push({ x: new Date(forecast[i].year, forecast[i].month - 1, forecast[i].day), y: bottomComplexity });
+        confidenceInterval3_.push({ x: new Date(forecast[i].year, forecast[i].month - 1, forecast[i].day), y: topComplexity });
     }
     for (var i = 0; i < check.length; i++) {
-        checkPoints.push({ x: new Date(check[i].year, check[i].month - 1, check[i].day), y: check[i].amount });
-        checkPoints1.push({ x: new Date(check[i].year, check[i].month - 1, check[i].day), y: check[i].complexity });
-        checkPoints2.push({ x: new Date(check[i].year, check[i].month - 1, check[i].day), y: check[i].productivity });
+        if (i == 0) {
+            checkPoints.push({ x: new Date(check[i].year, check[i].month - 1, check[i].day), y: check[i].amount});
+        }
+        else {
+            checkPoints.push({ x: new Date(check[i].year, check[i].month - 1, check[i].day), y: check[i].amount + 0.5 });
+        }
+        if (i == check.length - 1) {
+            checkPoints1.push({ x: new Date(check[i].year, check[i].month - 1, check[i].day), y: check[i].complexity - 0.5 });
+        }
+        else
+        {
+            checkPoints1.push({ x: new Date(check[i].year, check[i].month - 1, check[i].day), y: check[i].complexity });
+        }
+        checkPoints2.push({ x: new Date(check[i].year, check[i].month - 1, check[i].day), y: check[i].productivity});
+    }
+    for (var i = 0; i < time1.length; i++) {
+        timePoints1.push({ x: time1[i].amount, y: time1[i].time });
+        timePoints2.push({ x: time2[i].amount, y: time2[i].time });
     }
 	var chart = new CanvasJS.Chart("chartContainer", {
         animationEnabled: true,
         theme: "light2",
 		title: {
-			text: "Forecast amount of done tasks"
+			text: "Forecast amount of done tasks (ARIMA)"
         },
         legend: {
             itemclick: toggleDataSeries
         },
 		axisX: {
 			valueFormatString: "DD MMM YYYY",
-            title: "Number of week",
+            title: "Date of the end of week",
 			crosshair: {
 				enabled: true,
 				snapToDataPoint: true
@@ -69,29 +100,90 @@ window.onload = function () {
         },
             {
                 type: "stackedArea",
-                name: "Exponential Smoothing",
-                showInLegend: true,
-                axisYType: "secondary",
-                xValueFormatString: "DD MMM YYYY",
-                dataPoints: checkPoints,
-            },
-            {
-                type: "stackedArea",
                 name: "Arima",
                 showInLegend: true,
                 xValueFormatString: "DD MMM YYYY",
                 dataPoints: forecastPoints,
-            }]
-	});
+            },
+            {
+                type: "line",
+                color: "coral",
+                indexLabelFontSize: 16,
+                name: "Confidence Interval",
+                dataPoints: confidenceInterval2,
+                showInLegend: true,
+            },
+            {
+                type: "line",
+                color: "coral",
+                indexLabelFontSize: 16,
+                dataPoints: confidenceInterval2_,
+            },]
+    });
+
+    var chart5 = new CanvasJS.Chart("chartContainer5", {
+        animationEnabled: true,
+        theme: "light2",
+        title: {
+            text: "Forecast amount of done tasks (Exponential Smoothing)"
+        },
+        legend: {
+            itemclick: toggleDataSeries
+        },
+        axisX: {
+            valueFormatString: "DD MMM YYYY",
+            title: "Date of the end of week",
+            crosshair: {
+                enabled: true,
+                snapToDataPoint: true
+            }
+        },
+        axisY: {
+            title: "Amount of done tasks",
+            crosshair: {
+                enabled: true,
+                snapToDataPoint: true
+            }
+        },
+        data: [{
+            type: "stackedArea",
+            name: "History",
+            showInLegend: true,
+            xValueFormatString: "DD MMM YYYY",
+            dataPoints: dataPoints,
+        },
+        {
+            type: "stackedArea",
+            name: "Exponential Smoothing",
+            showInLegend: true,
+            xValueFormatString: "DD MMM YYYY",
+            dataPoints: checkPoints,
+            },
+            {
+                type: "line",
+                color: "coral",
+                indexLabelFontSize: 16,
+                name: "Confidence Interval",
+                dataPoints: confidenceInterval2,
+                showInLegend: true,
+            },
+            {
+                type: "line",
+                color: "coral",
+                indexLabelFontSize: 16,
+                dataPoints: confidenceInterval2_,
+            },]
+    });
+
     var chart1 = new CanvasJS.Chart("chartContainer1", {
         animationEnabled: true,
         theme: "light2",
         title: {
-            text: "Forecast average complexity of done tasks"
+            text: "Forecast average complexity of done tasks (ARIMA)"
         },
         axisX: {
             valueFormatString: "DD MMM YYYY",
-            title: "Number of week",
+            title: "Date of the end of week",
             crosshair: {
                 enabled: true,
                 snapToDataPoint: true
@@ -111,34 +203,143 @@ window.onload = function () {
             dataPoints: complexityPoints,
             showInLegend: true,
         },
-            {
-                type: "stackedArea",
-                name: "Exponential Smoothing",
-                xValueFormatString: "DD MMM YYYY",
-                axisYType: "secondary",
-                dataPoints: checkPoints1,
-                showInLegend: true,
-            },
         {
             type: "stackedArea",
             name: "Arima",
             xValueFormatString: "DD MMM YYYY",
-            axisYIndex: 0,
             dataPoints: forecastPoints1,
             showInLegend: true,
             },
+            {
+                type: "line",
+                color: "coral",
+                indexLabelFontSize: 16,
+                name: "Confidence Interval",
+                dataPoints: confidenceInterval3,
+                showInLegend: true,
+            },
+            {
+                type: "line",
+                color: "coral",
+                indexLabelFontSize: 16,
+                dataPoints: confidenceInterval3_,
+            },
             ]
+    });
+
+    var chart7 = new CanvasJS.Chart("chartContainer7", {
+        animationEnabled: true,
+        theme: "light2",
+        title: {
+            text: "Forecast average complexity of done tasks (Exponential Smoothing)"
+        },
+        axisX: {
+            valueFormatString: "DD MMM YYYY",
+            title: "Date of the end of week",
+            crosshair: {
+                enabled: true,
+                snapToDataPoint: true
+            }
+        },
+        axisY: {
+            title: "Average complexity of done tasks",
+            crosshair: {
+                enabled: true,
+                snapToDataPoint: true
+            }
+        },
+        data: [{
+            type: "stackedArea",
+            name: "History",
+            xValueFormatString: "DD MMM YYYY",
+            dataPoints: complexityPoints,
+            showInLegend: true,
+        },
+        {
+            type: "stackedArea",
+            name: "Exponential Smoothing",
+            xValueFormatString: "DD MMM YYYY",
+            dataPoints: checkPoints1,
+            showInLegend: true,
+            },
+            {
+                type: "line",
+                color: "coral",
+                indexLabelFontSize: 16,
+                name: "Confidence Interval",
+                dataPoints: confidenceInterval3,
+                showInLegend: true,
+            },
+            {
+                type: "line",
+                color: "coral",
+                indexLabelFontSize: 16,
+                dataPoints: confidenceInterval3_,
+            },
+        ]
     });
 
     var chart2 = new CanvasJS.Chart("chartContainer2", {
         animationEnabled: true,
         theme: "light2",
         title: {
-            text: "Forecast productivity"
+            text: "Forecast productivity (ARIMA)"
         },
         axisX: {
             valueFormatString: "DD MMM YYYY",
-            title: "Number of week",
+            title: "Date of the end of week",
+            crosshair: {
+                enabled: true,
+                snapToDataPoint: true
+            }
+        },
+        axisY: {
+            title: "Average complexity of done tasks",
+            crosshair: {
+                enabled: true,
+                snapToDataPoint: true
+            }
+        },
+        data: [{
+            type: "stackedArea",
+            name: "History",
+            xValueFormatString: "DD MMM YYYY",
+            dataPoints: productivityPoints,
+            showInLegend: true,
+        },
+        {
+            type: "stackedArea",
+            name: "Arima",
+            xValueFormatString: "DD MMM YYYY",
+            dataPoints: forecastPoints2,
+            showInLegend: true,
+            },
+            {
+                type: "line",
+                color: "coral",
+                indexLabelFontSize: 16,
+                name: "Confidence Interval",
+                dataPoints: confidenceInterval1,
+                showInLegend: true,
+            },
+            {
+                type: "line",
+                color: "coral",
+                indexLabelFontSize: 16,
+                dataPoints: confidenceInterval1_,
+            },
+        ]
+    });
+
+    var chart4 = new CanvasJS.Chart("chartContainer4", {
+        animationEnabled: true,
+        theme: "light2",
+        title: {
+            text: "Forecast productivity (Exponential Smoothing)"
+        },
+        axisX: {
+            valueFormatString: "DD MMM YYYY",
+            title: "Date of the end of week",
             crosshair: {
                 enabled: true,
                 snapToDataPoint: true
@@ -162,24 +363,69 @@ window.onload = function () {
             type: "stackedArea",
             name: "Exponential Smoothing",
             xValueFormatString: "DD MMM YYYY",
-            axisYType: "secondary",
             dataPoints: checkPoints2,
             showInLegend: true,
-        },
-        {
-            type: "stackedArea",
-            name: "Arima",
-            xValueFormatString: "DD MMM YYYY",
-            axisYIndex: 0,
-            dataPoints: forecastPoints2,
-            showInLegend: true,
-        },
+            },
+            {
+                type: "line",
+                color: "coral",
+                indexLabelFontSize: 16,
+                name: "Confidence Interval",
+                dataPoints: confidenceInterval1,
+                showInLegend: true,
+            },
+            {
+                type: "line",
+                color: "coral",
+                indexLabelFontSize: 16,
+                dataPoints: confidenceInterval1_,
+            },
         ]
     });
 
-    chart.render();
-    chart1.render();
+    var chart3 = new CanvasJS.Chart("chartContainer3", {
+        animationEnabled: true,
+        theme: "light2",
+        title: {
+            text: "Time of work"
+        },
+        axisX: {
+            title: "Amount of Sample",
+            crosshair: {
+                enabled: true,
+                snapToDataPoint: true
+            }
+        },
+        axisY: {
+            title: "Time (in tacts)",
+            crosshair: {
+                enabled: true,
+                snapToDataPoint: true
+            }
+        },
+        data: [
+            {
+                type: "stackedArea",
+                name: "Arima",
+                dataPoints: timePoints1,
+                showInLegend: true,
+            },
+        {
+            type: "stackedArea",
+            name: "Exponential Smoothing",
+            dataPoints: timePoints2,
+            showInLegend: true,
+        },
+
+        ]
+    });
     chart2.render();
+    chart4.render();
+    chart.render();
+    chart5.render();
+    chart1.render();
+    chart7.render();
+    chart3.render();
     function toggleDataSeries(e) {
         if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
             e.dataSeries.visible = false;
@@ -232,11 +478,15 @@ window.onload = function () {
             <span class="input-group-text">Accuracy of productivity</span>
         </div>
     </p>
-    <div id="chartContainer2" style="height: 370px; width: 100%; padding-top: 20px;"></div>
-    <div id="chartContainer" style="height: 370px; width: 100%; padding-top: 80px;"></div>
-    <div id="chartContainer1" style="height: 370px; width: 100%; padding-top: 140px;"></div>
 
-    <p style="padding-top: 160px;">
+    <div id="chartContainer2" style="height: 370px; width: 100%; padding-top: 20px;"></div>
+    <div id="chartContainer4" style="height: 370px; width: 100%; padding-top: 60px;"></div>
+    <div id="chartContainer" style="height: 370px; width: 100%; padding-top: 100px;"></div>
+    <div id="chartContainer5" style="height: 370px; width: 100%; padding-top: 140px;"></div>
+    <div id="chartContainer1" style="height: 370px; width: 100%; padding-top: 200px;"></div>
+    <div id="chartContainer7" style="height: 370px; width: 100%; padding-top: 240px;"></div>
+
+    <p style="padding-top: 220px;">
         <h3 style="color:#2874A6">Time of work for Arima (in milliseconds)</h3>
         <table class="table-blue" style="width:50%; margin-left: auto; margin-right: auto;">
             <tr>
@@ -283,6 +533,9 @@ window.onload = function () {
                 </tr>
             }
         </table>
+    </p>
+    <p>
+        <div id="chartContainer3" style="height: 370px; width: 50%; padding-top: 20px; margin-left: auto; margin-right: auto;"></div>
     </p>
     <p>
         <h3 style="color:#2874A6">Efficiency</h3>

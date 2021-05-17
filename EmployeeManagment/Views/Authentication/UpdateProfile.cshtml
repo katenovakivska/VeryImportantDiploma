@@ -57,7 +57,9 @@
                 </div>
             </p>
             <p>
+                
                 <div class="input-group mb-3" style="padding-left: 95px;padding-right: 95px;">
+                    <label style=" color: white">Ability to work in home</label>
                     <select class="custom-select" name="model.AbilityToWorkInHome">
                         @{
                             string str = (Model.AbilityToWorkInHome == 1) ? "yes" : "no";
@@ -75,7 +77,9 @@
                 </div>
             </p>
             <p>
+                
                 <div class="input-group mb-3" style="padding-left: 95px;padding-right: 95px;">
+                    <label style="color: white">Ability to work in office</label>
                     <select class="custom-select" name="model.AbilityToWorkInOffice">
                         @{
                             string str1 = (Model.AbilityToWorkInOffice == 1) ? "yes" : "no";
@@ -93,6 +97,7 @@
                 </div>
             </p>
             <p>
+                <label style="padding-left: 95px; color: white">Average complexity of tasks</label>
                 <input class="form-control" type="number" name="model.Experience" placeholder="Experience" value="@Model.Experience" required />
             </p>
             <div style="padding-bottom:15px; padding-left:160px;">

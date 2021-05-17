@@ -42,6 +42,7 @@
 
         <div style="padding-top: 60px; padding-left: 60px;">
             @*<h3 style="padding-bottom:20px;">Personal info</h3>*@
+            <p style="font-size:18px;">Personal info</p>
             <p style="font-size:18px;">Email: @Model.Email</p>
             <p style="font-size:18px;">Login: @Model.Login</p>
             @if (Model.FirstName != null && Model.SecondName != null)
@@ -109,6 +110,7 @@
             </form>
         </div>
         <div style="padding-top: 60px; padding-left: 60px;">
+            <p style="font-size:18px;">Evaluation of knowledge</p>
             @foreach (var s in ViewBag.Skills)
             {
                 foreach (var e in ViewBag.EmployeeSkills)

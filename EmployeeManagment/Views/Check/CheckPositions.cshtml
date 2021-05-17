@@ -3,103 +3,151 @@
 *@
 @{
 }
-<p style="padding-left: 60px; padding-top: 20px;">
-    <a class="btn btn-warning" role="button" href="~/Employee/AllPositions">
-        Back
-    </a>
-</p>
-@*<p>
-        <div class="input-group" style="width: 20%;right: -75%">
-            <input type="number" class="form-control" aria-label="Amount of uncorrect results" value="@ViewBag.Uncorrect" disabled>
-            <span class="input-group-text">Uncorrect</span>
-        </div>
-        <div class="input-group" style="width: 20%;right: -75%">
-            <input type="number" class="form-control" aria-label="Amount of uncorrect results" value="@ViewBag.UserSkills.Count" disabled>
-            <span class="input-group-text">Total</span>
-        </div>
-        <div class="input-group" style="width: 20%;right: -75%">
-            <input type="text" class="form-control" aria-label="Accuracy" value="@Math.Round(100*(1 - (double)ViewBag.Uncorrect/ViewBag.UserSkills.Count), 3)" disabled>
-            <span class="input-group-text">%</span>
-            <span class="input-group-text">Accuracy</span>
-        </div>
-    </p>*@
-<p>
-    <h3 style="color:#2874A6">Precision</h3>
-    <table class="table-blue" style="width:50%; margin-left: auto; margin-right: auto;">
-        <tr>
-            <th>Type</th>
-            <th>Presicion</th>
-            <th>Uncorrect</th>
-            <th>Total</th>
-        </tr>
-        @foreach (var s in ViewBag.Statistics)
-        {
-            <tr>
-                <td>@s.Type</td>
-                <td>@s.Precision</td>
-                <td>@s.Uncorrect</td>
-                <td>@s.Total</td>
-            </tr>
-        }
-    </table>
-<p>
-    <h3 style="color:#2874A6">Time of work (in tacts)</h3>
-    <table class="table-blue" style="width:50%; margin-left: auto; margin-right: auto;">
-        <tr>
-            <th>Amount</th>
-            <th>Experiment1</th>
-            <th>Experiment2</th>
-            <th>Experiment3</th>
-            <th>Experiment4</th>
-            <th>Average value</th>
-        </tr>
-        @foreach (var s in ViewBag.Efficiency)
-        {
-            <tr>
-                <td>@s.Amount</td>
-                <td>@s.Value1</td>
-                <td>@s.Value2</td>
-                <td>@s.Value3</td>
-                <td>@s.Value4</td>
-                <td>@s.Avg</td>
-            </tr>
-        }
-    </table>
-</p>
-    </p>
-@if (ViewBag.UserSkills.Count != 0)
-{
-    <h3 style="color:#2874A6">Positions</h3>
-    <table class="table-blue">
-        <tr>
-            <th>Name</th>
-            @foreach (var s in ViewBag.SkillNames)
-            {
-                <th>@s</th>
-            }
-            <th>Expected</th>
-            <th>Actual</th>
-        </tr>
-        @foreach (var user in ViewBag.UserSkills)
-        {
-            <tr>
-                <td>@user.FirstName</td>
-                @for (int i = 0; i < user.SkillEvaluations.GetLength(0); i++)
-                {
-                    <td>@user.SkillEvaluations[i]</td>
-                }
+<!DOCTYPE HTML>
+<html>
+<head>
+    <script>
+window.onload = function () {
+	var result = @Html.Raw(ViewBag.DataPoints);
+	var dataPoints = [];
 
-                <td>@user.Position</td>
-                @if (user.Position == user.NewPosition)
-                {
-                    <td>@user.NewPosition</td>
-                }
-                else
-                {
-                    <td style="background-color:#E74C3C ;">@user.NewPosition</td>
-                }
-            </tr>
-        }
-        <tr></tr>
-    </table>
+    for (var i = 0; i < result.length; i++){
+        dataPoints.push({ x: result[i].amount, y: result[i].time });
+	}
+
+    var chart = new CanvasJS.Chart("chartContainer", {
+        animationEnabled: true,
+        theme: "light2",
+        title: {
+            text: "Time of work"
+        },
+        axisX: {
+            title: "Size of sample",
+            crosshair: {
+                enabled: true,
+                snapToDataPoint: true
+            }
+        },
+        axisY: {
+            title: "Time (in tacts)",
+            crosshair: {
+                enabled: true,
+                snapToDataPoint: true
+            }
+        },
+        data: [{
+            type: "stackedArea",
+            dataPoints: dataPoints,
+        }]
+    });
+    chart.render();
+
 }
+    </script>
+</head>
+<body>
+    <p style="padding-left: 60px; padding-top: 40px;">
+        <a class="btn btn-warning" role="button" href="~/Employee/AllPositions">
+            Back
+        </a>
+    </p>
+    @*<p>
+            <div class="input-group" style="width: 20%;right: -75%">
+                <input type="number" class="form-control" aria-label="Amount of uncorrect results" value="@ViewBag.Uncorrect" disabled>
+                <span class="input-group-text">Uncorrect</span>
+            </div>
+            <div class="input-group" style="width: 20%;right: -75%">
+                <input type="number" class="form-control" aria-label="Amount of uncorrect results" value="@ViewBag.UserSkills.Count" disabled>
+                <span class="input-group-text">Total</span>
+            </div>
+            <div class="input-group" style="width: 20%;right: -75%">
+                <input type="text" class="form-control" aria-label="Accuracy" value="@Math.Round(100*(1 - (double)ViewBag.Uncorrect/ViewBag.UserSkills.Count), 3)" disabled>
+                <span class="input-group-text">%</span>
+                <span class="input-group-text">Accuracy</span>
+            </div>
+        </p>*@
+    <p>
+        <h3 style="color:#2874A6">Precision</h3>
+        <table class="table-blue" style="width:50%; margin-left: auto; margin-right: auto;">
+            <tr>
+                <th>Type</th>
+                <th>Presicion</th>
+                <th>Uncorrect</th>
+                <th>Total</th>
+            </tr>
+            @foreach (var s in ViewBag.Statistics)
+            {
+                <tr>
+                    <td>@s.Type</td>
+                    <td>@s.Precision</td>
+                    <td>@s.Uncorrect</td>
+                    <td>@s.Total</td>
+                </tr>
+            }
+        </table>
+    <p>
+        <h3 style="color:#2874A6">Time of work (in tacts)</h3>
+        <table class="table-blue" style="width:50%; margin-left: auto; margin-right: auto;">
+            <tr>
+                <th>Amount</th>
+                <th>Experiment1</th>
+                <th>Experiment2</th>
+                <th>Experiment3</th>
+                <th>Experiment4</th>
+                <th>Average value</th>
+            </tr>
+            @foreach (var s in ViewBag.Efficiency)
+            {
+                <tr>
+                    <td>@s.Amount</td>
+                    <td>@s.Value1</td>
+                    <td>@s.Value2</td>
+                    <td>@s.Value3</td>
+                    <td>@s.Value4</td>
+                    <td>@s.Avg</td>
+                </tr>
+            }
+        </table>
+    </p>
+    <p>
+    <div id="chartContainer" style="height: 370px; width: 50%; padding-top: 20px; margin-left: auto; margin-right: auto;"></div>
+    </p>
+    @if (ViewBag.UserSkills.Count != 0)
+    {
+        <h3 style="color:#2874A6">Positions</h3>
+        <table class="table-blue">
+            <tr>
+                <th>Name</th>
+                @foreach (var s in ViewBag.SkillNames)
+                {
+                    <th>@s</th>
+                }
+                <th>Expected</th>
+                <th>Actual</th>
+            </tr>
+            @foreach (var user in ViewBag.UserSkills)
+            {
+                <tr>
+                    <td>@user.FirstName</td>
+                    @for (int i = 0; i < user.SkillEvaluations.GetLength(0); i++)
+                    {
+                        <td>@user.SkillEvaluations[i]</td>
+                    }
+
+                    <td>@user.Position</td>
+                    @if (user.Position == user.NewPosition)
+                    {
+                        <td>@user.NewPosition</td>
+                    }
+                    else
+                    {
+                        <td style="background-color:#E74C3C ;">@user.NewPosition</td>
+                    }
+                </tr>
+            }
+            <tr></tr>
+        </table>
+    }
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+</body>
+</html>

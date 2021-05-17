@@ -1,364 +1,425 @@
 ﻿@model IEnumerable<EmployeeManagment.Models.UserProfile>
+    <!DOCTYPE HTML>
+    <html>
+    <head>
+        <script>
+    window.onload = function () {
+        var time1 = @Html.Raw(ViewBag.TimePoints1);
+        var time2 = @Html.Raw(ViewBag.TimePoints2);
+        var timePoints1 = [];
+        var timePoints2 = [];
 
-<p style="padding-left: 60px; padding-top: 20px;">
-    <a class="btn btn-warning" role="button" href="~/Employee/AllEmployees">
-        Back
-    </a>
-</p>
-@*<p>
-    <div class="input-group" style="width: 20%;right: -75%">
-        <input type="number" class="form-control" aria-label="Amount of uncorrect results" value="@ViewBag.Free.Count" disabled>
-        <span class="input-group-text">Total</span>
-    </div>
-    <div class="input-group" style="width: 20%;right: -75%">
-        <input type="number" class="form-control" aria-label="Amount of uncorrect results" value="@ViewBag.UncorrectB" disabled>
-        <span class="input-group-text">Uncorrect Bayessian</span>
-    </div>
-    <div class="input-group" style="width: 20%;right: -75%">
-        <input type="number" class="form-control" aria-label="Amount of uncorrect results" value="@ViewBag.UncorrectT" disabled>
-        <span class="input-group-text">Uncorrect Tree</span>
-    </div>
-    <div class="input-group" style="width: 20%;right: -75%">
-        <input type="text" class="form-control" aria-label="Accuracy" value="@ViewBag.AccuracyB" disabled>
-        <span class="input-group-text">%</span>
-        <span class="input-group-text">Accuracy Bayessian</span>
-    </div>
-    <div class="input-group" style="width: 20%;right: -75%">
-        <input type="text" class="form-control" aria-label="Accuracy" value="@ViewBag.AccuracyT" disabled>
-        <span class="input-group-text">%</span>
-        <span class="input-group-text">Accuracy Tree</span>
-    </div>
-</p>*@
-<p>
-    <h3 style="color:#2874A6">Precision Bayessian</h3>
-    <table class="table-blue" style="width:50%; margin-left: auto; margin-right: auto;">
-        <tr>
-            <th>Type</th>
-            <th>Presicion</th>
-            <th>Uncorrect</th>
-            <th>Total</th>
-        </tr>
-        @foreach (var s in ViewBag.StatisticsB)
-        {
-            <tr>
-                <td>@s.Type</td>
-                <td>@s.Precision</td>
-                <td>@s.Uncorrect</td>
-                <td>@s.Total</td>
-            </tr>
+        for (var i = 0; i < time1.length; i++) {
+            timePoints1.push({ x: time1[i].amount, y: time1[i].time });
+            timePoints2.push({ x: time2[i].amount, y: time2[i].time });
         }
-    </table>
-</p>
-<p>
-    <h3 style="color:#2874A6">Precision Tree of Decision</h3>
-    <table class="table-blue" style="width:50%; margin-left: auto; margin-right: auto;">
-        <tr>
-            <th>Type</th>
-            <th>Presicion</th>
-            <th>Uncorrect</th>
-            <th>Total</th>
-        </tr>
-        @foreach (var s in ViewBag.StatisticsT)
-        {
-            <tr>
-                <td>@s.Type</td>
-                <td>@s.Precision</td>
-                <td>@s.Uncorrect</td>
-                <td>@s.Total</td>
-            </tr>
-        }
-    </table>
-</p>
-<p>
-    <h3 style="color:#2874A6">Time of work for Baessian Classifier (in tacts)</h3>
-    <table class="table-blue" style="width:50%; margin-left: auto; margin-right: auto;">
-        <tr>
-            <th>Amount</th>
-            <th>Experiment1</th>
-            <th>Experiment2</th>
-            <th>Experiment3</th>
-            <th>Experiment4</th>
-            <th>Average value</th>
-        </tr>
-        @foreach (var s in ViewBag.EfficiencyB)
-        {
-            <tr>
-                <td>@s.Amount</td>
-                <td>@s.Value1</td>
-                <td>@s.Value2</td>
-                <td>@s.Value3</td>
-                <td>@s.Value4</td>
-                <td>@s.Avg</td>
-            </tr>
-        }
-    </table>
-</p>
-<p>
-    <h3 style="color:#2874A6">Time of work for Tree of Decision (in tacts)</h3>
-    <table class="table-blue" style="width:50%; margin-left: auto; margin-right: auto;">
-        <tr>
-            <th>Amount</th>
-            <th>Experiment1</th>
-            <th>Experiment2</th>
-            <th>Experiment3</th>
-            <th>Experiment4</th>
-            <th>Average value</th>
-        </tr>
-        @foreach (var s in ViewBag.EfficiencyT)
-        {
-            <tr>
-                <td>@s.Amount</td>
-                <td>@s.Value1</td>
-                <td>@s.Value2</td>
-                <td>@s.Value3</td>
-                <td>@s.Value4</td>
-                <td>@s.Avg</td>
-            </tr>
-        }
-    </table>
-</p>
-<p>
-    <h3 style="color:#2874A6">Efficiency</h3>
-    <table class="table-blue" style="width:50%; margin-left: auto; margin-right: auto;">
-        <tr>
-            <th>Amount</th>
-            <th>Time Baessian classifier</th>
-            <th>Time Tree of Desicion</th>
-            <th>SpeedUp</th>
-        </tr>
-        @foreach (var s in ViewBag.Efficiency)
-        {
-            <tr>
-                <td>@s.Amount</td>
-                <td>@s.Value1</td>
-                <td>@s.Value2</td>
-                <td>@s.SpeedUp</td>
-            </tr>
-        }
-    </table>
-</p>
-@if (Model.Count() != 0)
-{
-    <h3 style="color:#2874A6">In commands</h3>
 
-    <table class="table-blue">
-        <tr>
-            <th>Login</th>
-            <th>Command</th>
-            @{
-                int column = 0; }
-            @if (ViewBag.NotSignificant.Contains(column))
-            {
-                <th style="background-color: #17A589;">Level</th>
-            }
-            else
-            {
-                <th>Level</th>
-            }
-            @{column++;}
-            @if (ViewBag.NotSignificant.Contains(column))
-            {
-                <th style="background-color: #17A589;">Work from home</th>
-            }
-            else
-            {
-                <th>Work from home</th>
-            }
-            @{column++;}
-            @if (ViewBag.NotSignificant.Contains(column))
-            {
-                <th style="background-color: #17A589;">Work from office</th>
-            }
-            else
-            {
-                <th>Work from office</th>
-            }
-            @{column++;}
-            @if (ViewBag.NotSignificant.Contains(column))
-            {
-                <th style="background-color: #17A589;">Experience</th>
-            }
-            else
-            {
-                <th>Experience</th>
-            }
-            @{column++;}
-            @if (ViewBag.NotSignificant.Contains(column))
-            {
-                <th style="background-color: #17A589;">Average task complexity</th>
-            }
-            else
-            {
-                <th>Average task complexity</th>
-            }
+        var chart = new CanvasJS.Chart("chartContainer", {
+            animationEnabled: true,
+            theme: "light2",
+            title: {
+                text: "Time of work"
+            },
+            axisX: {
+                title: "Amount of Sample",
+                crosshair: {
+                    enabled: true,
+                    snapToDataPoint: true
+                }
+            },
+            axisY: {
+                title: "Time (in tacts)",
+                crosshair: {
+                    enabled: true,
+                    snapToDataPoint: true
+                }
+            },
+            data: [
+                {
+                    type: "stackedArea",
+                    name: "Tree of Decision",
+                    dataPoints: timePoints2,
+                    showInLegend: true,
+                },
+                {
+                    type: "stackedArea",
+                    name: "Baessian Classifier",
+                    dataPoints: timePoints1,
+                    showInLegend: true,
+                },
 
-        </tr>
-        @foreach (var user in Model)
-        {
-            if (user.CommandId != 0)
-            {
-                string level = "-";
-                string home = "-";
-                string work = "-";
-                int columnIndex = 0;
+            ]
+        });
+        chart.render();
+        }
+        </script>
+    </head>
+    <body>
+        <p style="padding-left: 60px; padding-top: 40px;">
+            <a class="btn btn-warning" role="button" href="~/Employee/AllEmployees">
+                Back
+            </a>
+        </p>
+        @*<p>
+            <div class="input-group" style="width: 20%;right: -75%">
+                <input type="number" class="form-control" aria-label="Amount of uncorrect results" value="@ViewBag.Free.Count" disabled>
+                <span class="input-group-text">Total</span>
+            </div>
+            <div class="input-group" style="width: 20%;right: -75%">
+                <input type="number" class="form-control" aria-label="Amount of uncorrect results" value="@ViewBag.UncorrectB" disabled>
+                <span class="input-group-text">Uncorrect Bayessian</span>
+            </div>
+            <div class="input-group" style="width: 20%;right: -75%">
+                <input type="number" class="form-control" aria-label="Amount of uncorrect results" value="@ViewBag.UncorrectT" disabled>
+                <span class="input-group-text">Uncorrect Tree</span>
+            </div>
+            <div class="input-group" style="width: 20%;right: -75%">
+                <input type="text" class="form-control" aria-label="Accuracy" value="@ViewBag.AccuracyB" disabled>
+                <span class="input-group-text">%</span>
+                <span class="input-group-text">Accuracy Bayessian</span>
+            </div>
+            <div class="input-group" style="width: 20%;right: -75%">
+                <input type="text" class="form-control" aria-label="Accuracy" value="@ViewBag.AccuracyT" disabled>
+                <span class="input-group-text">%</span>
+                <span class="input-group-text">Accuracy Tree</span>
+            </div>
+        </p>*@
+        <p>
+            <h3 style="color:#2874A6">Precision Bayessian</h3>
+            <table class="table-blue" style="width:50%; margin-left: auto; margin-right: auto;">
                 <tr>
-                    <td>@user.Login</td>
-                    <td>@ViewBag.Commands[user.CommandId - 1]</td>
-                    @if (user.Level == 1)
+                    <th>Type</th>
+                    <th>Presicion</th>
+                    <th>Uncorrect</th>
+                    <th>Total</th>
+                </tr>
+                @foreach (var s in ViewBag.StatisticsB)
+                {
+                    <tr>
+                        <td>@s.Type</td>
+                        <td>@s.Precision</td>
+                        <td>@s.Uncorrect</td>
+                        <td>@s.Total</td>
+                    </tr>
+                }
+            </table>
+        </p>
+        <p>
+            <h3 style="color:#2874A6">Precision Tree of Decision</h3>
+            <table class="table-blue" style="width:50%; margin-left: auto; margin-right: auto;">
+                <tr>
+                    <th>Type</th>
+                    <th>Presicion</th>
+                    <th>Uncorrect</th>
+                    <th>Total</th>
+                </tr>
+                @foreach (var s in ViewBag.StatisticsT)
+                {
+                    <tr>
+                        <td>@s.Type</td>
+                        <td>@s.Precision</td>
+                        <td>@s.Uncorrect</td>
+                        <td>@s.Total</td>
+                    </tr>
+                }
+            </table>
+        </p>
+        <p>
+            <h3 style="color:#2874A6">Time of work for Baessian Classifier (in tacts)</h3>
+            <table class="table-blue" style="width:50%; margin-left: auto; margin-right: auto;">
+                <tr>
+                    <th>Amount</th>
+                    <th>Experiment1</th>
+                    <th>Experiment2</th>
+                    <th>Experiment3</th>
+                    <th>Experiment4</th>
+                    <th>Average value</th>
+                </tr>
+                @foreach (var s in ViewBag.EfficiencyB)
+                {
+                    <tr>
+                        <td>@s.Amount</td>
+                        <td>@s.Value1</td>
+                        <td>@s.Value2</td>
+                        <td>@s.Value3</td>
+                        <td>@s.Value4</td>
+                        <td>@s.Avg</td>
+                    </tr>
+                }
+            </table>
+        </p>
+        <p>
+            <h3 style="color:#2874A6">Time of work for Tree of Decision (in tacts)</h3>
+            <table class="table-blue" style="width:50%; margin-left: auto; margin-right: auto;">
+                <tr>
+                    <th>Amount</th>
+                    <th>Experiment1</th>
+                    <th>Experiment2</th>
+                    <th>Experiment3</th>
+                    <th>Experiment4</th>
+                    <th>Average value</th>
+                </tr>
+                @foreach (var s in ViewBag.EfficiencyT)
+                {
+                    <tr>
+                        <td>@s.Amount</td>
+                        <td>@s.Value1</td>
+                        <td>@s.Value2</td>
+                        <td>@s.Value3</td>
+                        <td>@s.Value4</td>
+                        <td>@s.Avg</td>
+                    </tr>
+                }
+            </table>
+        </p>
+        <p>
+            <div id="chartContainer" style="height: 370px; width: 50%; padding-top: 20px; margin-left: auto; margin-right: auto;"></div>
+        </p>
+        <p>
+            <h3 style="color:#2874A6">Efficiency</h3>
+            <table class="table-blue" style="width:50%; margin-left: auto; margin-right: auto;">
+                <tr>
+                    <th>Amount</th>
+                    <th>Time Baessian classifier</th>
+                    <th>Time Tree of Desicion</th>
+                    <th>SpeedUp</th>
+                </tr>
+                @foreach (var s in ViewBag.Efficiency)
+                {
+                    <tr>
+                        <td>@s.Amount</td>
+                        <td>@s.Value1</td>
+                        <td>@s.Value2</td>
+                        <td>@s.SpeedUp</td>
+                    </tr>
+                }
+            </table>
+        </p>
+        @if (Model.Count() != 0)
+        {
+            <h3 style="color:#2874A6">In commands</h3>
+
+            <table class="table-blue">
+                <tr>
+                    <th>Login</th>
+                    <th>Command</th>
+                    @{
+                        int column = 0; }
+                    @if (ViewBag.NotSignificant.Contains(column))
                     {
-                        level = "junior";
-                    }
-                    else if (user.Level == 2)
-                    {
-                        level = "middle";
-                    }
-                    else if (user.Level == 3)
-                    {
-                        level = "senior";
-                    }
-                    @if (ViewBag.NotSignificant.Contains(columnIndex))
-                    {
-                        <td style="background-color: #17A589;">@level</td>
+                        <th style="background-color: #17A589;">Level</th>
                     }
                     else
                     {
-                        <td>@level</td>
+                        <th>Level</th>
                     }
-                    @{columnIndex++;}
-                    @if (user.AbilityToWorkInHome == 1)
+                    @{column++;}
+                    @if (ViewBag.NotSignificant.Contains(column))
                     {
-                        home = "+";
-                    }
-                    @if (user.AbilityToWorkInOffice == 1)
-                    {
-                        work = "+";
-                    }
-                    @if (ViewBag.NotSignificant.Contains(columnIndex))
-                    {
-                        <td style="background-color: #17A589;">@home</td>
+                        <th style="background-color: #17A589;">Work from home</th>
                     }
                     else
                     {
-                        <td>@home</td>
+                        <th>Work from home</th>
                     }
-                    @{columnIndex++;}
-                    @if (ViewBag.NotSignificant.Contains(columnIndex))
+                    @{column++;}
+                    @if (ViewBag.NotSignificant.Contains(column))
                     {
-                        <td style="background-color: #17A589;">@work</td>
-                    }
-                    else
-                    {
-                        <td>@work</td>
-                    }
-                    @{columnIndex++;}
-                    @if (ViewBag.NotSignificant.Contains(columnIndex))
-                    {
-                        <td style="background-color: #17A589;">@user.Experience</td>
+                        <th style="background-color: #17A589;">Work from office</th>
                     }
                     else
                     {
-                        <td>@user.Experience</td>
+                        <th>Work from office</th>
                     }
-                    @{columnIndex++; }
-                    @if (ViewBag.NotSignificant.Contains(columnIndex))
+                    @{column++;}
+                    @if (ViewBag.NotSignificant.Contains(column))
                     {
-                        <td style="background-color: #17A589;">@user.AverageComplexityOfTasks</td>
+                        <th style="background-color: #17A589;">Experience</th>
                     }
                     else
                     {
-                        <td>@user.AverageComplexityOfTasks</td>
+                        <th>Experience</th>
+                    }
+                    @{column++;}
+                    @if (ViewBag.NotSignificant.Contains(column))
+                    {
+                        <th style="background-color: #17A589;">Average task complexity</th>
+                    }
+                    else
+                    {
+                        <th>Average task complexity</th>
                     }
 
                 </tr>
-            }
+                @foreach (var user in Model)
+                {
+                    if (user.CommandId != 0)
+                    {
+                        string level = "-";
+                        string home = "-";
+                        string work = "-";
+                        int columnIndex = 0;
+                        <tr>
+                            <td>@user.Login</td>
+                            <td>@ViewBag.Commands[user.CommandId - 1]</td>
+                            @if (user.Level == 1)
+                            {
+                                level = "junior";
+                            }
+                            else if (user.Level == 2)
+                            {
+                                level = "middle";
+                            }
+                            else if (user.Level == 3)
+                            {
+                                level = "senior";
+                            }
+                            @if (ViewBag.NotSignificant.Contains(columnIndex))
+                            {
+                                <td style="background-color: #17A589;">@level</td>
+                            }
+                            else
+                            {
+                                <td>@level</td>
+                            }
+                            @{columnIndex++;}
+                            @if (user.AbilityToWorkInHome == 1)
+                            {
+                                home = "+";
+                            }
+                            @if (user.AbilityToWorkInOffice == 1)
+                            {
+                                work = "+";
+                            }
+                            @if (ViewBag.NotSignificant.Contains(columnIndex))
+                            {
+                                <td style="background-color: #17A589;">@home</td>
+                            }
+                            else
+                            {
+                                <td>@home</td>
+                            }
+                            @{columnIndex++;}
+                            @if (ViewBag.NotSignificant.Contains(columnIndex))
+                            {
+                                <td style="background-color: #17A589;">@work</td>
+                            }
+                            else
+                            {
+                                <td>@work</td>
+                            }
+                            @{columnIndex++;}
+                            @if (ViewBag.NotSignificant.Contains(columnIndex))
+                            {
+                                <td style="background-color: #17A589;">@user.Experience</td>
+                            }
+                            else
+                            {
+                                <td>@user.Experience</td>
+                            }
+                            @{columnIndex++; }
+                            @if (ViewBag.NotSignificant.Contains(columnIndex))
+                            {
+                                <td style="background-color: #17A589;">@user.AverageComplexityOfTasks</td>
+                            }
+                            else
+                            {
+                                <td>@user.AverageComplexityOfTasks</td>
+                            }
 
+                        </tr>
+                    }
+
+                }
+            </table>
         }
-    </table>
-}
-@if (ViewBag.Free.Count != 0)
-{
-    <h3 style="color:#2874A6">Without commands</h3>
-    <table class="table-blue">
-        <tr>
-            <th>Login</th>
-            <th>Level</th>
-            <th>Work from home</th>
-            <th>Work from office</th>
-            <th>Experience</th>
-            <th>Average task complexity</th>
-            <th>Expected command</th>
-            <th>Tree Command</th>
-            <th>Baessian Command</th>
-        </tr>
-        
-        @{
-            int i = 0;
-            foreach (var user in ViewBag.Free)
-            {
-                    string level = "-";
-                    string home = "-";
-                    string work = "-";
+        @if (ViewBag.Free.Count != 0)
+        {
+            <h3 style="color:#2874A6">Without commands</h3>
+            <table class="table-blue">
                 <tr>
-                    <td>@user.Login</td>
-
-                    @if (user.Level == 1)
-                    {
-                        level = "junior";
-                    }
-                    else if (user.Level == 2)
-                    {
-                        level = "middle";
-                    }
-                    else if (user.Level == 3)
-                    {
-                        level = "senior";
-                    }
-                    <td>@level</td>
-                    @if (user.AbilityToWorkInHome == 1)
-                    {
-                        home = "+";
-                    }
-                    @if (user.AbilityToWorkInOffice == 1)
-                    {
-                        work = "+";
-                    }
-                    <td>@home</td>
-                    <td>@work</td>
-                    <td>@user.Experience</td>
-                    <td>@user.AverageComplexityOfTasks</td>
-                    <td>@ViewBag.CNames[i]</td>
-                    @if (ViewBag.Commands[ViewBag.GroupTree[ViewBag.Free.IndexOf(user)] - 1] == ViewBag.CNames[i])
-                    {
-                        <td>@ViewBag.Commands[ViewBag.GroupTree[ViewBag.Free.IndexOf(user)] - 1]</td>
-                    }
-                    else
-                    {
-                        <td style="background-color: #E74C3C;">@ViewBag.Commands[ViewBag.GroupTree[ViewBag.Free.IndexOf(user)] - 1]</td>
-                    }
-                    @if (ViewBag.Commands[ViewBag.Group[ViewBag.Free.IndexOf(user)] - 1] == ViewBag.CNames[i])
-                    {
-
-                        <td>@ViewBag.Commands[ViewBag.Group[ViewBag.Free.IndexOf(user)] - 1]</td>
-                    }
-                    else
-                    {
-                        <td style="background-color: #E74C3C;">@ViewBag.Commands[ViewBag.Group[ViewBag.Free.IndexOf(user)] - 1]</td>
-                    }
-
+                    <th>Login</th>
+                    <th>Level</th>
+                    <th>Work from home</th>
+                    <th>Work from office</th>
+                    <th>Experience</th>
+                    <th>Average task complexity</th>
+                    <th>Expected command</th>
+                    <th>Tree Command</th>
+                    <th>Baessian Command</th>
                 </tr>
-            
-                i++;
 
-        }
-        }
-    </table>
+                @{
+                    int i = 0;
+                    foreach (var user in ViewBag.Free)
+                    {
+                        string level = "-";
+                        string home = "-";
+                        string work = "-";
+                        <tr>
+                            <td>@user.Login</td>
 
-    @foreach (var w in ViewBag.Warnings)
-    {
-        <h3 style="color:#E74C3C">@w</h3>
-    }
-}
-else
-{
-    <h3 style="color:#E74C3C">There is no free employees</h3>
-}
+                            @if (user.Level == 1)
+                            {
+                                level = "junior";
+                            }
+                            else if (user.Level == 2)
+                            {
+                                level = "middle";
+                            }
+                            else if (user.Level == 3)
+                            {
+                                level = "senior";
+                            }
+                            <td>@level</td>
+                            @if (user.AbilityToWorkInHome == 1)
+                            {
+                                home = "+";
+                            }
+                            @if (user.AbilityToWorkInOffice == 1)
+                            {
+                                work = "+";
+                            }
+                            <td>@home</td>
+                            <td>@work</td>
+                            <td>@user.Experience</td>
+                            <td>@user.AverageComplexityOfTasks</td>
+                            <td>@ViewBag.CNames[i]</td>
+                            @if (ViewBag.Commands[ViewBag.GroupTree[ViewBag.Free.IndexOf(user)] - 1] == ViewBag.CNames[i])
+                            {
+                                <td>@ViewBag.Commands[ViewBag.GroupTree[ViewBag.Free.IndexOf(user)] - 1]</td>
+                            }
+                            else
+                            {
+                                <td style="background-color: #E74C3C;">@ViewBag.Commands[ViewBag.GroupTree[ViewBag.Free.IndexOf(user)] - 1]</td>
+                            }
+                            @if (ViewBag.Commands[ViewBag.Group[ViewBag.Free.IndexOf(user)] - 1] == ViewBag.CNames[i])
+                            {
+
+                                <td>@ViewBag.Commands[ViewBag.Group[ViewBag.Free.IndexOf(user)] - 1]</td>
+                            }
+                            else
+                            {
+                                <td style="background-color: #E74C3C;">@ViewBag.Commands[ViewBag.Group[ViewBag.Free.IndexOf(user)] - 1]</td>
+                            }
+
+                        </tr>
+
+                        i++;
+
+                    }
+                }
+            </table>
+
+            @foreach (var w in ViewBag.Warnings)
+            {
+                <h3 style="color:#E74C3C">@w</h3>
+            }
+        }
+        else
+        {
+            <h3 style="color:#E74C3C">There is no free employees</h3>
+        }
+
+        <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    </body>

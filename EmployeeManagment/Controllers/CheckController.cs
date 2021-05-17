@@ -189,15 +189,26 @@ namespace EmployeeManagment.Controllers
             ViewBag.Deviation2 = Math.Round(deviation2, 0);
             JsonSerializerSettings jsonSetting = new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore };
             ViewBag.DataPoints = JsonConvert.SerializeObject(points, jsonSetting);
+            double bottomProductivityBorder = 0, topProductivityBorder = 0, bottomAmountBorder = 0, topAmountBorder = 0, bottomComplexityBorder = 0, topComplexityBorder = 0;
+            ConfidenceIntervalProductivity(points, out bottomProductivityBorder, out topProductivityBorder);
+            ConfidenceIntervalAmount(points, out bottomAmountBorder, out topAmountBorder);
+            ConfidenceIntervalComplexity(points, out bottomComplexityBorder, out topComplexityBorder);
+            ViewBag.BottomProductivity = JsonConvert.SerializeObject(bottomProductivityBorder, jsonSetting);
+            ViewBag.TopProductivity = JsonConvert.SerializeObject(topProductivityBorder, jsonSetting);
+            ViewBag.BottomAmount = JsonConvert.SerializeObject(bottomAmountBorder, jsonSetting);
+            ViewBag.TopAmount = JsonConvert.SerializeObject(topAmountBorder, jsonSetting);
+            ViewBag.BottomComplexity = JsonConvert.SerializeObject(bottomComplexityBorder, jsonSetting);
+            ViewBag.TopComplexity = JsonConvert.SerializeObject(topComplexityBorder, jsonSetting);
             ViewBag.ForecastPoints = JsonConvert.SerializeObject(forecastPoints, jsonSetting);
             ViewBag.ForecastPoints1 = JsonConvert.SerializeObject(forecastPoints1, jsonSetting);
+            ViewBag.TimePoints1 = JsonConvert.SerializeObject(FillTimePointsArima(), jsonSetting);
+            ViewBag.TimePoints2 = JsonConvert.SerializeObject(FillTimePointsExponential(), jsonSetting);
             ViewBag.CommandId = commandId;
             ViewBag.Amounts = amounts;
             ViewBag.Complexities = complexities;
             ViewBag.Productivities = productivities;
             return View();
         }
-
 
         [HttpGet]
         public IActionResult CheckPositions()
@@ -243,6 +254,8 @@ namespace EmployeeManagment.Controllers
             ViewBag.Uncorrect = uncorrect;
             ViewBag.Procent = procent;
             ViewBag.Statistics = statistics;
+            JsonSerializerSettings jsonSetting = new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore };
+            ViewBag.DataPoints = JsonConvert.SerializeObject(FillTimePointsPosition(), jsonSetting);
             return View();
         }
 
@@ -345,6 +358,9 @@ namespace EmployeeManagment.Controllers
             ViewBag.UncorrectT = uncorrectTree;
             ViewBag.AccuracyB = Math.Round(100 * (1 - ((double)uncorrectBayessian / withoutCommand.Count())), 3);
             ViewBag.AccuracyT = Math.Round(100 * (1 - ((double)uncorrectTree / withoutCommand.Count())), 3);
+            JsonSerializerSettings jsonSetting = new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore };
+            ViewBag.TimePoints1 = JsonConvert.SerializeObject(FillTimePointsCommandBaessian(), jsonSetting);
+            ViewBag.TimePoints2 = JsonConvert.SerializeObject(FillTimePointsCommandTree(), jsonSetting);
             return View(employees);
         }
         public List<int> TreeOfDecision(List<UserProfile> withoutCommand, int[] orderOfFactors, List<int> commands, List<UserProfile> employees)
@@ -569,7 +585,6 @@ namespace EmployeeManagment.Controllers
             usersSet.Add(new UserSkillModel(db.Groups.Count()) { FirstName = "user100", SkillEvaluations = new int[] { 3, 1, 2, 2, 2, 2, 1, 2, 4, 4, 1, 4 }, Position = "Front-end devs" });
             return usersSet;
         }
-
         public List<UserProfile> CreateEmployeesSetForBaessianCheck()
         {
             List<UserProfile> employees = new List<UserProfile>();
@@ -599,7 +614,6 @@ namespace EmployeeManagment.Controllers
 
             return commands;
         }
-
         public List<UserProfile> CreateEmployeesWithoutCommantSetForBaessianCheck()
         {
             List<UserProfile> employees = new List<UserProfile>();
@@ -706,7 +720,6 @@ namespace EmployeeManagment.Controllers
             
             return employees;
         }
-
         public List<Efficiency> FillEfficiencyCommand()
         {
             List<Efficiency> efficiency = new List<Efficiency>();
@@ -717,7 +730,6 @@ namespace EmployeeManagment.Controllers
             efficiency.Add(new Efficiency(500, 24740, 5971.25));
             return efficiency;
         }
-
         public List<Efficiency> FillEfficiencyCommandBaessian()
         {
             List<Efficiency> efficiency = new List<Efficiency>();
@@ -728,7 +740,16 @@ namespace EmployeeManagment.Controllers
             efficiency.Add(new Efficiency(500, 26898, 25870, 26305, 19887));
             return efficiency;
         }
-
+        public List<TimePoint> FillTimePointsCommandBaessian()
+        {
+            List<TimePoint> efficiency = new List<TimePoint>();
+            efficiency.Add(new TimePoint(100, 7124, 6360, 5376, 5516));
+            efficiency.Add(new TimePoint(200, 10301, 15953, 9148, 7960));
+            efficiency.Add(new TimePoint(300, 14269, 15287, 15196, 18709));
+            efficiency.Add(new TimePoint(400, 21011, 17885, 18005, 17121));
+            efficiency.Add(new TimePoint(500, 26898, 25870, 26305, 19887));
+            return efficiency;
+        }
         public List<Efficiency> FillEfficiencyCommandTree()
         {
             List<Efficiency> efficiency = new List<Efficiency>();
@@ -739,7 +760,16 @@ namespace EmployeeManagment.Controllers
             efficiency.Add(new Efficiency(500, 7112, 6737, 5264, 4742));
             return efficiency;
         }
-
+        public List<TimePoint> FillTimePointsCommandTree()
+        {
+            List<TimePoint> efficiency = new List<TimePoint>();
+            efficiency.Add(new TimePoint(100, 1988, 2084, 1245, 2061));
+            efficiency.Add(new TimePoint(200, 2261, 2148, 2277, 3099));
+            efficiency.Add(new TimePoint(300, 4905, 4016, 4216, 4184));
+            efficiency.Add(new TimePoint(400, 5043, 6999, 4259, 5057));
+            efficiency.Add(new TimePoint(500, 7112, 6737, 5264, 4742));
+            return efficiency;
+        }
         public List<Efficiency> FillEfficiencyPosition()
         {
             List<Efficiency> efficiency = new List<Efficiency>();
@@ -750,7 +780,16 @@ namespace EmployeeManagment.Controllers
             efficiency.Add(new Efficiency(500, 8482148, 8059157, 8960133, 8163811));
             return efficiency;
         }
-
+        public List<TimePoint> FillTimePointsPosition()
+        {
+            List<TimePoint> efficiency = new List<TimePoint>();
+            efficiency.Add(new TimePoint(100, 2624897, 1827489, 1836216, 1988633));
+            efficiency.Add(new TimePoint(200, 4171482, 3119529, 3243570, 3350087));
+            efficiency.Add(new TimePoint(300, 5669984, 4816400, 5105663, 5134992));
+            efficiency.Add(new TimePoint(400, 7714925, 6448576, 6647241, 7206634));
+            efficiency.Add(new TimePoint(500, 8482148, 8059157, 8960133, 8163811));
+            return efficiency;
+        }
         public List<Efficiency> FillEfficiencyForecast()
         {
             List<Efficiency> efficiency = new List<Efficiency>();
@@ -761,7 +800,6 @@ namespace EmployeeManagment.Controllers
             efficiency.Add(new Efficiency(500, 24907.5, 3921));
             return efficiency;
         }
-
         public List<Efficiency> FillEfficiencyArima()
         {
             List<Efficiency> efficiency = new List<Efficiency>();
@@ -772,7 +810,16 @@ namespace EmployeeManagment.Controllers
             efficiency.Add(new Efficiency(500, 3462, 3918, 4097, 4207));
             return efficiency;
         }
-
+        public List<TimePoint> FillTimePointsArima()
+        {
+            List<TimePoint> efficiency = new List<TimePoint>();
+            efficiency.Add(new TimePoint(100, 1033, 892, 952, 776));
+            efficiency.Add(new TimePoint(200, 2059, 1783, 2008, 1807));
+            efficiency.Add(new TimePoint(300, 2580, 2671, 2367, 2147));
+            efficiency.Add(new TimePoint(400, 3538, 2932, 3199, 3286));
+            efficiency.Add(new TimePoint(500, 3462, 3918, 4097, 4207));
+            return efficiency;
+        }
         public List<Efficiency> FillEfficiencyExponential()
         {
             List<Efficiency> efficiency = new List<Efficiency>();
@@ -783,33 +830,40 @@ namespace EmployeeManagment.Controllers
             efficiency.Add(new Efficiency(500, 22776, 25900, 24567, 26387));
             return efficiency;
         }
-
-        public List<string> Change(List<int> groups, List<int> ids, List<Command> commands, out int uncorrect)
+        public List<TimePoint> FillTimePointsExponential()
         {
-            List<string> names = new List<string>();
-            List<int> rands = new List<int>();
-            Random random = new Random();
-            uncorrect = 0;
-            for (int i = 0; i < 5; i++)
-            {
-                rands.Add(random.Next(0, groups.Count()));
-            }
-            for (int i = 0; i < groups.Count(); i++)
-            {
-                if (rands.Contains(i))
-                {
-                    names.Add(commands.Where(k => k.Id == ids[i]).Select(k => k.Name).FirstOrDefault());
-                    if (commands.Where(k => k.Id == ids[i]).Select(k => k.Name).FirstOrDefault() != commands.Where(k => k.Id == groups[i]).Select(k => k.Name).FirstOrDefault())
-                    {
-                        uncorrect++;
-                    }
-                }
-                else 
-                {
-                    names.Add(commands.Where(k => k.Id == groups[i]).Select(k => k.Name).FirstOrDefault());
-                }
-            }
-            return names;
+            List<TimePoint> efficiency = new List<TimePoint>();
+            efficiency.Add(new TimePoint(100, 5863, 6297, 4613, 5573));
+            efficiency.Add(new TimePoint(200, 11983, 11851, 12599, 10673));
+            efficiency.Add(new TimePoint(300, 16953, 15687, 18041, 16363));
+            efficiency.Add(new TimePoint(400, 21010, 25207, 24220, 19848));
+            efficiency.Add(new TimePoint(500, 22776, 25900, 24567, 26387));
+            return efficiency;
+        }
+
+        public void ConfidenceIntervalProductivity(List<DataPoint> points, out double bottomProductivityBorder, out double topProductivityBorder)
+        {
+            double average = points.Sum(x => x.Productivity) / points.Count;
+            double sigma = Math.Sqrt(points.Sum(x => Math.Pow(x.Productivity - average, 2)) / (points.Count - 1));
+            double z = 2.575;
+            bottomProductivityBorder = average - (sigma * z / Math.Sqrt(points.Count));
+            topProductivityBorder = average + (sigma * z / Math.Sqrt(points.Count));
+        }
+        public void ConfidenceIntervalAmount(List<DataPoint> points, out double bottomAmountBorder, out double topAmountBorder)
+        {
+            double average = points.Sum(x => x.Amount) / points.Count;
+            double sigma = Math.Sqrt(points.Sum(x => Math.Pow(x.Amount - average, 2)) / (points.Count - 1));
+            double z = 2.575;
+            bottomAmountBorder = average - (sigma * z / Math.Sqrt(points.Count));
+            topAmountBorder = average + (sigma * z / Math.Sqrt(points.Count));
+        }
+        public void ConfidenceIntervalComplexity(List<DataPoint> points, out double bottomComplexityBorder, out double topComplexityBorder)
+        {
+            double average = points.Sum(x => x.AvgComplexity) / points.Count;
+            double sigma = Math.Sqrt(points.Sum(x => Math.Pow(x.AvgComplexity - average, 2)) / (points.Count - 1));
+            double z = 2.575;
+            bottomComplexityBorder = average - (sigma * z / Math.Sqrt(points.Count));
+            topComplexityBorder = average + (sigma * z / Math.Sqrt(points.Count));
         }
     }
 }
